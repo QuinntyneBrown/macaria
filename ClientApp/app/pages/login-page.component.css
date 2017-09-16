@@ -1,0 +1,13 @@
+:host {
+    display: block;
+    margin: 0px 20px;
+}
+
+ce-login {
+    margin: 40px auto;
+}
+
+h2 {
+    display: block;
+    text-align: center;
+}
