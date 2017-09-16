@@ -37,16 +37,16 @@ export class QuillTextEditorComponent implements ControlValueAccessor {
             modules: {
                 toolbar: [
                     [{ header: [1, 2, false] }],
-                    ['bold', 'italic', 'underline'],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                    ['link']
+                    ['bold', 'underline'],
+                    [{ 'list': 'ordered' }],
+                    []
                 ]
             },
             theme: 'snow'
         });
     }
 
-    public get nativeElement(): HTMLElement { return this._elementRef.nativeElement as HTMLElement; }
+    public get nativeElement(): HTMLElement { return this._elementRef.nativeElement.querySelector(".editor") as HTMLElement; }
 
     private _quill: any;
 }

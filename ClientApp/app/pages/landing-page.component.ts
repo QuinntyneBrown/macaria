@@ -1,4 +1,4 @@
-import {Component, ViewEncapsulation, ElementRef} from "@angular/core";
+import {Component, ViewEncapsulation, ElementRef } from "@angular/core";
 import {NotesService} from "../shared/services/notes.service";
 import {Note} from "../shared/models/note.model";
 import {constants} from "../shared/constants";
@@ -6,6 +6,8 @@ import {CorrelationIdsList} from "../shared/services/correlation-ids-list";
 import {addOrUpdate} from "../shared/utilities/add-or-update";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {EventHub} from "../shared/services/event-hub";
+import {ActivatedRoute} from "@angular/router";
+import {Subscription} from "rxjs/Subscription";
 
 declare var moment: any;
 @Component({
@@ -15,45 +17,75 @@ declare var moment: any;
 })
 export class LandingPageComponent {
     constructor(
+        private _activatedRoute: ActivatedRoute,
         private _correlationIdsList: CorrelationIdsList,
         private _notesService: NotesService,
         private _elementRef: ElementRef,
         private _eventHub: EventHub
     ) {
-        this.onKeyDown = this.onKeyDown;
+        this.saveNote = this.saveNote.bind(this);
     }
 
     public ngOnInit() {
-        this._notesService.get().subscribe(x => this.notes$.next(x.notes));
+        if (this._activatedRoute.snapshot.params["slug"]) {
+            this._notesService.getBySlugAndCurrentUser({ slug: this._activatedRoute.snapshot.params["slug"] })
+                .subscribe(x => {
+                this.note = x.note;
+                });
+        } else {
+            this._notesService.getByTitleAndCurrentUser({ title: this.today })
+                .subscribe(x => {
+                    this.note = x.note == null ? new Note() : x.note
+                });
+        }
+
+        this._notesService.getByCurrentUser().subscribe(x => this.notes$.next(x.notes));            
     }
 
-    public intervalId: any = 0;
+    
+    ngAfterViewInit() {
+        this._elementRef.nativeElement.querySelector("ce-quill-text-editor").addEventListener("keydown", this.saveNote);
+    }
 
-    public onKeyDown() {
-        if (this.intervalId) return;
+    public timeoutId: any = null;
+    public saving: boolean = false;
 
-        this.intervalId = setInterval(() => {
+    public saveNote() {       
+        if (this.saving) return;
+
+        this.saving = true;
+
+        setTimeout(() => {
+            
             const correlationId = this._correlationIdsList.newId();
 
             this._notesService.addOrUpdate({
                 correlationId,
-                note: this.note
+                note: {
+                    id: this.note.id,
+                    title: this.note.title,
+                    body: this.note.body
+                },
             }).subscribe();
 
-            this._eventHub.events.subscribe(x => {
-                if (x.correlationId == correlationId)
-                    this.notes$.next(addOrUpdate({
-                        item: x.payload.entity,
-                        items: this.notes$.value
-                    }));
+            this._eventHub.events.subscribe(x => {                
+                if (x.payload.correlationId == correlationId) {
+                    
+                    if(x.payload.entity)
+                        this.notes$.next(addOrUpdate({
+                            item: x.payload.entity,
+                            items: this.notes$.value
+                        }));                                         
+                    this.saving = false;
+                }
             });
-        }, 300);
+        }, 1000);
         
     }
 
+    private _saveSubscription: Subscription;
+
     public notes$: BehaviorSubject<Array<Note>> = new BehaviorSubject([]);
 
-    public note: Note = <Note>{};
-
-    public get today(): string { return moment().format(constants.DATE_FORMAT); }
+    public note: Note = new Note();    
 }

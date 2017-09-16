@@ -28,5 +28,14 @@ export const RoutingModule = RouterModule.forRoot([
     {
         path: 'tenants/set',
         component: SetTenantPageComponent
-    }
+    },
+    {
+        path: ':slug',
+        component: LandingPageComponent,
+        canActivate: [
+            TenantGuardService,
+            AuthGuardService,
+            EventHubConnectionGuardService
+        ]
+    },
 ]);

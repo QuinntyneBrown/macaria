@@ -10,27 +10,30 @@ import { Observable } from "rxjs";
 export class AppComponent {
     constructor(private _elementRef: ElementRef,
         private _loginRedirectService: LoginRedirectService
-    ) { }
-
-    ngOnInit() {
-        this.nativeElement.addEventListener("click", () => {
-
-            if (this._clickStream != null) return;
-
-            this._clickStream = Observable.fromEvent(this.nativeElement, "click");
-
-            var subscription =  this._clickStream.buffer(this._clickStream.debounce(() => Observable.timer(250)))
-                .map(list => list.length)
-                .filter(x => x === 2)
-                .subscribe(() => {
-                    subscription = null;
-                    this._clickStream = null;
-                    this._loginRedirectService.redirectToLogin()
-                });
-        })        
+    ) {
+        this._onClick = this._onClick.bind(this);
     }
 
-    private _clickStream: Observable<any>;
+    ngOnInit() {
+        this.nativeElement.addEventListener("click", this._onClick);
+    }
+
+    private _timeoutId: number;
+
+    private _clickCount:number = 0;
+    private _onClick() {
+        if (this._timeoutId) clearTimeout(this._timeoutId);
+
+        this._clickCount++;
+
+        if (this._clickCount == 2) {
+            this._loginRedirectService.redirectToLogin();
+            clearTimeout(this._timeoutId);
+            return;
+        }
+
+        this._timeoutId = (setTimeout(() => this._clickCount = 0, 250) as any); 
+    }
 
     public get nativeElement(): HTMLElement { return this._elementRef.nativeElement as HTMLElement; }
 }

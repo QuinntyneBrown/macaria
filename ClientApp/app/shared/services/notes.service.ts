@@ -22,10 +22,22 @@ export class NotesService {
             .get<{ notes: Array<Note> }>(`${this._baseUrl}/api/notes/get`)
             .catch(this._errorService.catchErrorResponse);
     }
+    
+    public getByTitleAndCurrentUser(options: { title:string }): Observable<{ note: Note }> {
+        return this._httpClient
+            .get<{ note: Note }>(`${this._baseUrl}/api/notes/getByTitleAndCurrentUser?title=${options.title}`)
+            .catch(this._errorService.catchErrorResponse);
+    }
 
     public getByCurrentUser(): Observable<{ notes: Array<Note> }> {
         return this._httpClient
             .get<{ notes: Array<Note> }>(`${this._baseUrl}/api/notes/getByCurrentUser`)
+            .catch(this._errorService.catchErrorResponse);
+    }
+
+    public getBySlugAndCurrentUser(options: {slug:string}): Observable<{ note: Note }> {
+        return this._httpClient
+            .get<{ note: Note }>(`${this._baseUrl}/api/notes/getBySlugAndCurrentUser?slug=${options.slug}`)
             .catch(this._errorService.catchErrorResponse);
     }
 

@@ -106,6 +106,8 @@
     <Content Include="ClientApp\styles\list.css" />
     <Content Include="ClientApp\styles\modal-window.css" />
     <Content Include="ClientApp\styles\page.css" />
+    <Content Include="dist\app.js" />
+    <Content Include="dist\vendor.js" />
     <Content Include="index.html" />
     <Content Include="libs\jquery.js" />
     <Content Include="libs\jquery.signalR-2.2.1.js" />
@@ -122,6 +124,8 @@
     <Content Include="ClientApp\app\shared\components\header.component.html" />
     <Content Include="ClientApp\app\shared\components\note-tile.component.html" />
     <Content Include="ClientApp\app\shared\components\note-list.component.html" />
+    <None Include="Properties\PublishProfiles\macaria - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\macaria - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
@@ -132,9 +136,7 @@
     <Content Include="Web.config" />
     <Content Include="webpack.config.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\app.component.ts">
       <DependentUpon>app.component.html</DependentUpon>
