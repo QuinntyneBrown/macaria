@@ -29,6 +29,8 @@ import { TenantInterceptor } from "./interceptors/tenant.interceptor";
 
 import { HeaderComponent } from "./components/header.component";
 import { LoginComponent } from "./components/login.component";
+import { NoteListComponent } from "./components/note-list.component";
+import { NoteTileComponent } from "./components/note-tile.component";
 import { QuillTextEditorComponent } from "./components/quill-text-editor.component";
 import { SetTenantFormComponent } from "./components/set-tenant-form.component";
 
@@ -71,6 +73,8 @@ const providers = [
 const declarables = [
     HeaderComponent,
     LoginComponent,
+    NoteListComponent,
+    NoteTileComponent,
     QuillTextEditorComponent,
     SetTenantFormComponent
 ];

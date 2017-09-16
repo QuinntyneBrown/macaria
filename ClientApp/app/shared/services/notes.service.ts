@@ -23,6 +23,12 @@ export class NotesService {
             .catch(this._errorService.catchErrorResponse);
     }
 
+    public getByCurrentUser(): Observable<{ notes: Array<Note> }> {
+        return this._httpClient
+            .get<{ notes: Array<Note> }>(`${this._baseUrl}/api/notes/getByCurrentUser`)
+            .catch(this._errorService.catchErrorResponse);
+    }
+
     public getById(options: { id: number }): Observable<{ note:Note}> {
         return this._httpClient
             .get<{note: Note}>(`${this._baseUrl}/api/notes/getById?id=${options.id}`)

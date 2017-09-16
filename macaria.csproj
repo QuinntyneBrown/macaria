@@ -75,12 +75,20 @@
     <Content Include="ClientApp\app\pages\login-page.component.css">
       <DependentUpon>login-page.component.html</DependentUpon>
     </Content>
-    <Content Include="ClientApp\app\pages\set-tenant-page.component.css" />
+    <Content Include="ClientApp\app\pages\set-tenant-page.component.css">
+      <DependentUpon>set-tenant-page.component.html</DependentUpon>
+    </Content>
     <Content Include="ClientApp\app\pages\set-tenant-page.component.html" />
     <Content Include="ClientApp\app\shared\components\login.component.css">
       <DependentUpon>login.component.html</DependentUpon>
     </Content>
     <Content Include="ClientApp\app\shared\components\login.component.html" />
+    <Content Include="ClientApp\app\shared\components\note-list.component.css">
+      <DependentUpon>note-list.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\note-tile.component.css">
+      <DependentUpon>note-tile.component.html</DependentUpon>
+    </Content>
     <Content Include="ClientApp\app\shared\components\quill-text-editor.component.css">
       <DependentUpon>quill-text-editor.component.html</DependentUpon>
     </Content>
@@ -102,7 +110,9 @@
     <Content Include="libs\jquery.js" />
     <Content Include="libs\jquery.signalR-2.2.1.js" />
     <Content Include="libs\moment.min.js" />
+    <Content Include="libs\quill.core.css" />
     <Content Include="libs\quill.min.js" />
+    <Content Include="libs\quill.snow.css" />
     <Content Include="libs\rome.min.js" />
     <Content Include="package.json" />
     <None Include="packages.config" />
@@ -110,9 +120,10 @@
     <Content Include="ClientApp\app\pages\landing-page.component.html" />
     <Content Include="ClientApp\app\pages\login-page.component.html" />
     <Content Include="ClientApp\app\shared\components\header.component.html" />
+    <Content Include="ClientApp\app\shared\components\note-tile.component.html" />
+    <Content Include="ClientApp\app\shared\components\note-list.component.html" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".gitattributes" />
     <Content Include=".gitignore" />
     <Content Include="ClientApp\app\app.component.css">
       <DependentUpon>app.component.html</DependentUpon>
@@ -138,9 +149,17 @@
     <TypeScriptCompile Include="ClientApp\app\pages\login-page.component.ts">
       <DependentUpon>login-page.component.html</DependentUpon>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\app\pages\set-tenant-page.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\pages\set-tenant-page.component.ts">
+      <DependentUpon>set-tenant-page.component.html</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\components\login.component.ts">
       <DependentUpon>login.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\note-list.component.ts">
+      <DependentUpon>note-list.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\note-tile.component.ts">
+      <DependentUpon>note-tile.component.html</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\components\quill-text-editor.component.ts">
       <DependentUpon>quill-text-editor.component.html</DependentUpon>
