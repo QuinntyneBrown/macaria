@@ -10,7 +10,8 @@ import {ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
 import {FormGroup,FormControl,Validators} from "@angular/forms";
 import {Observable} from "rxjs/Observable";
-
+import {NOTE_TILE_CLICKED} from "../shared/components/note-tile.component";
+import {Router, NavigationEnd} from "@angular/router";
 declare var moment: any;
 
 @Component({
@@ -24,17 +25,23 @@ export class LandingPageComponent {
         private _correlationIdsList: CorrelationIdsList,
         private _notesService: NotesService,
         private _elementRef: ElementRef,
-        private _eventHub: EventHub
-    ) { }
+        private _eventHub: EventHub,
+        private _router: Router
+    ) {
+        this.onNoteTileClicked = this.onNoteTileClicked.bind(this);
+    }
     
     public quillEditorFormControl: FormControl = new FormControl('');
-    
-    ngAfterViewInit() {
 
-        this.note$.subscribe(x => {
-            this.quillEditorFormControl.patchValue(x.body);
-        });
+    public onNoteTileClicked(e: any) {
+        this._router.navigate([e.detail.note.slug]);
+    }
 
+    ngOnDestroy() {
+        this._elementRef.nativeElement.removeEventListener(NOTE_TILE_CLICKED, this.onNoteTileClicked);
+    }
+
+    public onNavigationEnd() {
         if (this._activatedRoute.snapshot.params["slug"]) {
             this._notesService.getBySlugAndCurrentUser({ slug: this._activatedRoute.snapshot.params["slug"] })
                 .subscribe(x => this.note$.next(x.note));
@@ -43,6 +50,23 @@ export class LandingPageComponent {
                 .subscribe(x => this.note$.next(x.note == null ? new Note() : x.note));
         }
 
+        window.scrollTo(0, 0);
+    }
+
+    ngAfterViewInit() {
+
+        this.note$.subscribe(x => this.quillEditorFormControl.patchValue(x.body));
+
+        this.onNavigationEnd();
+
+        this._router.events.subscribe((val) => {
+            if (val instanceof NavigationEnd) {
+                this.onNavigationEnd();
+            }
+        });
+
+        this._elementRef.nativeElement.addEventListener(NOTE_TILE_CLICKED, this.onNoteTileClicked);
+        
         this._notesService.getByCurrentUser().subscribe(x => this.notes$.next(x.notes)); 
 
         Observable
@@ -61,13 +85,11 @@ export class LandingPageComponent {
                 }).subscribe();
 
                 this._eventHub.events.subscribe(x => {
-                    if (x.payload.correlationId == correlationId) {
-                        if (x.payload.entity)
-                            this.notes$.next(addOrUpdate({
-                                item: x.payload.entity,
-                                items: this.notes$.value
-                            }));
-                    }
+                    if (x.payload.correlationId == correlationId && x.payload.entity)
+                        this.notes$.next(addOrUpdate({
+                            item: x.payload.entity,
+                            items: this.notes$.value
+                        }));                     
                 });
             }).subscribe();
     }

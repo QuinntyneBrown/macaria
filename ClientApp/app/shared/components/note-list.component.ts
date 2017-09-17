@@ -11,9 +11,7 @@ import { Note } from "../models/note.model";
 })
 export class NoteListComponent {
 
-    ngOnInit() {
-
-    }
+    ngOnInit() { }
 
     @Input()
     public notes: Array<Note> = [];
