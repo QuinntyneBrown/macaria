@@ -16,11 +16,14 @@ declare var Quill: any;
     selector: "ce-quill-text-editor"
 })
 export class QuillTextEditorComponent implements ControlValueAccessor {
-    constructor(private _elementRef: ElementRef) { }
-
-    public get value() { return this.nativeElement.children[0].innerHTML; }
-
-    public writeValue(value: any): void { this.nativeElement.children[0].innerHTML = value; }
+    constructor(private _elementRef: ElementRef) {
+        this.onTextChanged = this.onTextChanged.bind(this);
+    }
+    
+    public writeValue(value: any): void {
+        if (this.qlEditorNativeElement && value)
+            this.qlEditorNativeElement.innerHTML = value;
+    }
 
     public registerOnChange(fn: any): void { this.onChangeCallback = fn; }
 
@@ -44,9 +47,17 @@ export class QuillTextEditorComponent implements ControlValueAccessor {
             },
             theme: 'snow'
         });
+
+        this._quill.on('text-change', this.onTextChanged);
+    }
+
+    public onTextChanged(delta, oldDelta, source) {        
+        this.onChangeCallback(this.qlEditorNativeElement.innerHTML);
     }
 
     public get nativeElement(): HTMLElement { return this._elementRef.nativeElement.querySelector(".editor") as HTMLElement; }
+
+    public get qlEditorNativeElement(): HTMLElement { return this._elementRef.nativeElement.querySelector(".ql-editor") as HTMLElement; }
 
     private _quill: any;
 }
