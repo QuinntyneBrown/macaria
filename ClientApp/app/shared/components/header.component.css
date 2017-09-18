@@ -1,4 +1,9 @@
 :host {
     display:block;
-    content:contain;
+    background-color:#333;
+    height:42px;
+}
+
+ce-hamburger-button {
+    margin: 10.5px 0px 0px 20px;
 }

@@ -11,6 +11,6 @@ export class Note {
 
     public body: string;
 
-    public tags: Array<Tag> = [];
+    public tags?: Array<Tag> = [];
     
 }

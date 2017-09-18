@@ -82,6 +82,10 @@
       <DependentUpon>set-tenant-page.component.html</DependentUpon>
     </Content>
     <Content Include="ClientApp\app\pages\set-tenant-page.component.html" />
+    <Content Include="ClientApp\app\shared\components\hamburger-button.component.css">
+      <DependentUpon>hamburger-button.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\hamburger-button.component.html" />
     <Content Include="ClientApp\app\shared\components\login.component.css">
       <DependentUpon>login.component.html</DependentUpon>
     </Content>
@@ -168,6 +172,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\pages\set-tenant-page.component.ts">
       <DependentUpon>set-tenant-page.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\hamburger-button.component.ts">
+      <DependentUpon>hamburger-button.component.html</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\components\login.component.ts">
       <DependentUpon>login.component.html</DependentUpon>

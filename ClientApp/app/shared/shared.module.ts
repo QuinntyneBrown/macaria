@@ -33,6 +33,7 @@ import { NoteListComponent } from "./components/note-list.component";
 import { NoteTileComponent } from "./components/note-tile.component";
 import { QuillTextEditorComponent } from "./components/quill-text-editor.component";
 import { SetTenantFormComponent } from "./components/set-tenant-form.component";
+import { HamburgerButtonComponent } from "./components/hamburger-button.component";
 
 const providers = [
     EventHub,
@@ -76,7 +77,8 @@ const declarables = [
     NoteListComponent,
     NoteTileComponent,
     QuillTextEditorComponent,
-    SetTenantFormComponent
+    SetTenantFormComponent,
+    HamburgerButtonComponent
 ];
 
 @NgModule({
