@@ -17,6 +17,7 @@ import { Space } from "./services/space";
 import { ModalService } from "./services/modal.service";
 import { UsersService } from "./services/users.service";
 import { NotesService } from "./services/notes.service";
+import { TagsService } from "./services/tags.service";
 
 import { AuthGuardService } from "./guards/auth-guard.service"
 import { TenantGuardService } from "./guards/tenant-guard.service";
@@ -54,6 +55,7 @@ const providers = [
     ModalService,
     UsersService,
     NotesService,
+    TagsService,
     {
         provide: HTTP_INTERCEPTORS,
         useClass: JwtInterceptor,

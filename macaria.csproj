@@ -236,6 +236,7 @@
     <TypeScriptCompile Include="ClientApp\app\shared\services\ruler.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\space.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\storage.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\services\tags.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\users.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\shared.module.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\utilities\add-or-update.ts" />
