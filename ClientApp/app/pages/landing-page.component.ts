@@ -1,4 +1,4 @@
-import {Component, ViewEncapsulation, ElementRef } from "@angular/core";
+import {Component, ElementRef } from "@angular/core";
 import {NotesService} from "../shared/services/notes.service";
 import {Note} from "../shared/models/note.model";
 import {constants} from "../shared/constants";
@@ -12,6 +12,8 @@ import {FormGroup,FormControl,Validators} from "@angular/forms";
 import {Observable} from "rxjs/Observable";
 import {NOTE_TILE_CLICKED} from "../shared/components/note-tile.component";
 import {Router, NavigationEnd} from "@angular/router";
+import {Storage} from "../shared/services/storage.service";
+
 declare var moment: any;
 
 @Component({
@@ -26,7 +28,8 @@ export class LandingPageComponent {
         private _notesService: NotesService,
         private _elementRef: ElementRef,
         private _eventHub: EventHub,
-        private _router: Router
+        private _router: Router,
+        private _storage: Storage
     ) {
         this.onNoteTileClicked = this.onNoteTileClicked.bind(this);
     }
@@ -49,11 +52,31 @@ export class LandingPageComponent {
             this._notesService.getByTitleAndCurrentUser({ title: moment().format(constants.DATE_FORMAT) })
                 .subscribe(x => this.note$.next(x.note == null ? new Note() : x.note));
         }
-
         window.scrollTo(0, 0);
     }
 
     ngAfterViewInit() {
+
+        this._eventHub.events.subscribe(x => {
+            if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity)
+                this.notes$.next(addOrUpdate({
+                    item: x.payload.entity,
+                    items: this.notes$.value
+                }));
+
+            if (!this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity) {
+                this.notes$.next(addOrUpdate({
+                    item: x.payload.entity,
+                    items: this.notes$.value
+                }));
+
+                
+                if (x.tenantUniqueId == this._storage.get({ name: constants.TENANT }) && this.note$.value.id == x.payload.entity.id) {
+                    this.note$.next(x.payload.entity);
+                }
+                
+            }
+        });
 
         this.note$.subscribe(x => this.quillEditorFormControl.patchValue(x.body));
 
@@ -74,7 +97,6 @@ export class LandingPageComponent {
             .debounce(() => Observable.timer(300))
             .map(() => {
                 const correlationId = this._correlationIdsList.newId();
-
                 this._notesService.addOrUpdate({
                     correlationId,
                     note: {
@@ -83,14 +105,6 @@ export class LandingPageComponent {
                         body: this.quillEditorFormControl.value
                     },
                 }).subscribe();
-
-                this._eventHub.events.subscribe(x => {
-                    if (x.payload.correlationId == correlationId && x.payload.entity)
-                        this.notes$.next(addOrUpdate({
-                            item: x.payload.entity,
-                            items: this.notes$.value
-                        }));                     
-                });
             }).subscribe();
     }
     

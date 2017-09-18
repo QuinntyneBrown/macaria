@@ -1,4 +1,4 @@
 <label>Search</label>
-<input placeholder="Search" />
+<input type="text" placeholder="Search" [formControl]="searchInputFormControl" />
 
 <ce-note-tile *ngFor="let note of notes" [note]="note"></ce-note-tile>

@@ -1,3 +1,10 @@
 :host {
     display:block;
+    padding:0px 0px 40px 0px;
+}
+
+input[type='text'] {
+    border: none;
+    line-height: 3em;
+    margin-bottom:30px;
 }

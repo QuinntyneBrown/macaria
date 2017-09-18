@@ -7,3 +7,8 @@ ce-note-list {
     margin:20px 20px 20px 20px;
     width: calc(100% - 40px);
 }
+
+
+ce-landing-page .ql-toolbar.ql-snow {
+    border: 1px solid #fff !important;
+}
