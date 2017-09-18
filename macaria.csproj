@@ -75,6 +75,9 @@
     <Content Include="ClientApp\app\pages\login-page.component.css">
       <DependentUpon>login-page.component.html</DependentUpon>
     </Content>
+    <Content Include="ClientApp\app\pages\search-page.component.css">
+      <DependentUpon>search-page.component.html</DependentUpon>
+    </Content>
     <Content Include="ClientApp\app\pages\set-tenant-page.component.css">
       <DependentUpon>set-tenant-page.component.html</DependentUpon>
     </Content>
@@ -100,6 +103,14 @@
     <Content Include="ClientApp\app\shared\components\header.component.css">
       <DependentUpon>header.component.html</DependentUpon>
     </Content>
+    <Content Include="ClientApp\app\shared\components\tag.component.css">
+      <DependentUpon>tag.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\tag.component.html" />
+    <Content Include="ClientApp\app\shared\components\tags.component.css">
+      <DependentUpon>tags.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\tags.component.html" />
     <Content Include="ClientApp\styles\edit.css" />
     <Content Include="ClientApp\styles\forms.css" />
     <Content Include="ClientApp\styles\list-item.css" />
@@ -126,6 +137,7 @@
     <Content Include="ClientApp\app\shared\components\note-list.component.html" />
     <None Include="Properties\PublishProfiles\macaria - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\macaria - Web Deploy.pubxml" />
+    <Content Include="ClientApp\app\pages\search-page.component.html" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
@@ -151,6 +163,9 @@
     <TypeScriptCompile Include="ClientApp\app\pages\login-page.component.ts">
       <DependentUpon>login-page.component.html</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\pages\search-page.component.ts">
+      <DependentUpon>search-page.component.html</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\pages\set-tenant-page.component.ts">
       <DependentUpon>set-tenant-page.component.html</DependentUpon>
     </TypeScriptCompile>
@@ -169,6 +184,12 @@
     <TypeScriptCompile Include="ClientApp\app\shared\components\set-tenant-form.component.ts">
       <DependentUpon>set-tenant-form.component.html</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\tag.component.ts">
+      <DependentUpon>tag.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\tags.component.ts">
+      <DependentUpon>tags.component.html</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\constants.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\guards\auth-guard.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\guards\current-user-guard.service.ts" />
@@ -182,6 +203,7 @@
     <TypeScriptCompile Include="ClientApp\app\shared\interceptors\index.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\interceptors\jwt.interceptor.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\interceptors\tenant.interceptor.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\models\tag.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\authentication.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\content-ref.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\correlation-ids-list.ts" />

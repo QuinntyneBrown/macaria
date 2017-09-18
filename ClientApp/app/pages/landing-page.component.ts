@@ -69,12 +69,10 @@ export class LandingPageComponent {
                     item: x.payload.entity,
                     items: this.notes$.value
                 }));
-
                 
                 if (x.tenantUniqueId == this._storage.get({ name: constants.TENANT }) && this.note$.value.id == x.payload.entity.id) {
                     this.note$.next(x.payload.entity);
-                }
-                
+                }                
             }
         });
 
