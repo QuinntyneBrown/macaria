@@ -1,6 +1,9 @@
 import { Component, ElementRef } from "@angular/core";
 import { LoginRedirectService } from "./shared/services/login-redirect.service";
 import { Observable } from "rxjs";
+import { NAVIGATE_BY_URL } from "./shared/components/menu.component";
+import { Router } from "@angular/router";
+import { PopoverService } from "./shared/services/popover.service";
 
 @Component({
     templateUrl: "./app.component.html",
@@ -9,13 +12,22 @@ import { Observable } from "rxjs";
 })
 export class AppComponent {
     constructor(private _elementRef: ElementRef,
-        private _loginRedirectService: LoginRedirectService
+        private _loginRedirectService: LoginRedirectService,
+        private _router: Router,
+        private _popoverService: PopoverService
     ) {
         this._onClick = this._onClick.bind(this);
+        this.onNavigateByUrl = this.onNavigateByUrl.bind(this);
     }
 
     ngOnInit() {
         this.nativeElement.addEventListener("click", this._onClick);
+        document.body.addEventListener(NAVIGATE_BY_URL, this.onNavigateByUrl);
+    }
+
+    public onNavigateByUrl(e) {
+        this._popoverService.hide();
+        this._router.navigateByUrl(e.detail.url);
     }
 
     private _timeoutId: number;

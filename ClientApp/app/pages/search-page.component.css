@@ -1,4 +1,7 @@
 :host {
     display:block;
-    content:contain;
+}
+
+.container {
+    margin:20px 20px 0px 20px;
 }

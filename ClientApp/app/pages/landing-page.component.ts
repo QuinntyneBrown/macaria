@@ -10,7 +10,6 @@ import {ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
 import {FormGroup,FormControl,Validators} from "@angular/forms";
 import {Observable} from "rxjs/Observable";
-import {NOTE_TILE_CLICKED} from "../shared/components/note-tile.component";
 import {Router, NavigationEnd} from "@angular/router";
 import {Storage} from "../shared/services/storage.service";
 
@@ -31,18 +30,11 @@ export class LandingPageComponent {
         private _router: Router,
         private _storage: Storage
     ) {
-        this.onNoteTileClicked = this.onNoteTileClicked.bind(this);
+        
     }
     
     public quillEditorFormControl: FormControl = new FormControl('');
-
-    public onNoteTileClicked(e: any) {
-        this._router.navigate([e.detail.note.slug]);
-    }
-
-    ngOnDestroy() {
-        this._elementRef.nativeElement.removeEventListener(NOTE_TILE_CLICKED, this.onNoteTileClicked);
-    }
+    
 
     public onNavigationEnd() {
         if (this._activatedRoute.snapshot.params["slug"]) {
@@ -85,8 +77,6 @@ export class LandingPageComponent {
                 this.onNavigationEnd();
             }
         });
-
-        this._elementRef.nativeElement.addEventListener(NOTE_TILE_CLICKED, this.onNoteTileClicked);
         
         this._notesService.getByCurrentUser().subscribe(x => this.notes$.next(x.notes)); 
 

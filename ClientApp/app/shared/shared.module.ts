@@ -34,6 +34,7 @@ import { NoteTileComponent } from "./components/note-tile.component";
 import { QuillTextEditorComponent } from "./components/quill-text-editor.component";
 import { SetTenantFormComponent } from "./components/set-tenant-form.component";
 import { HamburgerButtonComponent } from "./components/hamburger-button.component";
+import "./components/menu.component";
 
 const providers = [
     EventHub,

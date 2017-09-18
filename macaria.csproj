@@ -90,6 +90,10 @@
       <DependentUpon>login.component.html</DependentUpon>
     </Content>
     <Content Include="ClientApp\app\shared\components\login.component.html" />
+    <Content Include="ClientApp\app\shared\components\menu.component.css">
+      <DependentUpon>menu.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\menu.component.html" />
     <Content Include="ClientApp\app\shared\components\note-list.component.css">
       <DependentUpon>note-list.component.html</DependentUpon>
     </Content>
@@ -115,6 +119,7 @@
       <DependentUpon>tags.component.html</DependentUpon>
     </Content>
     <Content Include="ClientApp\app\shared\components\tags.component.html" />
+    <Content Include="ClientApp\assets\ic_search_white_24px.svg" />
     <Content Include="ClientApp\styles\edit.css" />
     <Content Include="ClientApp\styles\forms.css" />
     <Content Include="ClientApp\styles\list-item.css" />
@@ -178,6 +183,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\components\login.component.ts">
       <DependentUpon>login.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\menu.component.ts">
+      <DependentUpon>menu.component.html</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\components\note-list.component.ts">
       <DependentUpon>note-list.component.html</DependentUpon>
