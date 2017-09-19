@@ -1,0 +1,1 @@
+<cs-tag-list-item *ngFor="let tag of tags" [tag]="tag" (select)="select.emit($event)" (delete)="delete.emit($event)"></cs-tag-list-item>

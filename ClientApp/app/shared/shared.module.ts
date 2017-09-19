@@ -39,7 +39,11 @@ import { SetTenantFormComponent } from "./components/set-tenant-form.component";
 import { HamburgerButtonComponent } from "./components/hamburger-button.component";
 import { TagComponent } from "./components/tag.component";
 import { TagsComponent } from "./components/tags.component";
+import { TagListItemComponent } from "./components/tag-list-item.component";
+import { TagListComponent } from "./components/tag-list.component";
 import "./components/menu.component";
+import "./components/tag-edit-modal.component";
+import "./components/tag-edit.component";
 
 const providers = [
     EventHub,
@@ -89,7 +93,9 @@ const declarables = [
     SetTenantFormComponent,
     HamburgerButtonComponent,
     TagComponent,
-    TagsComponent
+    TagsComponent,
+    TagListComponent,
+    TagListItemComponent
 ];
 
 @NgModule({

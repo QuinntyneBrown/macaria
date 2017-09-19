@@ -14,10 +14,6 @@ export class MenuComponent extends HTMLElement {
         this._onMenuItemClick = this._onMenuItemClick.bind(this);
     }
 
-    static get observedAttributes () {
-        return [];
-    }
-
     async connectedCallback() {
 
         template.innerHTML = `<style>${css}</style>${html}`; 
@@ -28,12 +24,7 @@ export class MenuComponent extends HTMLElement {
         if (!this.hasAttribute('role'))
             this.setAttribute('role', 'menu');
 
-        this._bind();
         this._setEventListeners();
-    }
-
-    private async _bind() {
-
     }
 
     private _setEventListeners() {
@@ -43,6 +34,8 @@ export class MenuComponent extends HTMLElement {
     }
 
     private _onMenuItemClick(e: Event) {
+        e.stopPropagation();
+        e.preventDefault();
         this.dispatchEvent(customEvents.create({
             name: NAVIGATE_BY_URL, detail: { url: (e.target as HTMLElement).getAttribute("[routerLink]") }
         }));        
@@ -56,13 +49,6 @@ export class MenuComponent extends HTMLElement {
 
     public get menuItemElements(): NodeListOf<HTMLElement> {
         return this.shadowRoot.querySelectorAll("li a") as any;
-    }
-
-    attributeChangedCallback (name, oldValue, newValue) {
-        switch (name) {
-            default:
-                break;
-        }
     }
 }
 

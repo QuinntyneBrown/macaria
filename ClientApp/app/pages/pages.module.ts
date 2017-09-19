@@ -9,12 +9,14 @@ import { LandingPageComponent } from "./landing-page.component";
 import { LoginPageComponent } from "./login-page.component";
 import { SearchPageComponent } from "./search-page.component";
 import { SetTenantPageComponent } from "./set-tenant-page.component";
+import { TagManagementPageComponent } from "./tag-management-page.component";
 
 const declarables = [
     LandingPageComponent,
     LoginPageComponent,
     SearchPageComponent,
-    SetTenantPageComponent
+    SetTenantPageComponent,
+    TagManagementPageComponent
 ];
 
 @NgModule({

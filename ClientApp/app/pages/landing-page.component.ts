@@ -40,14 +40,15 @@ export class LandingPageComponent {
     
     public quillEditorFormControl: FormControl = new FormControl('');
     
+    private _subscriptions: Array<Subscription> = [];
 
     public onNavigationEnd() {
         if (this._activatedRoute.snapshot.params["slug"]) {
-            this._notesService.getBySlugAndCurrentUser({ slug: this._activatedRoute.snapshot.params["slug"] })
-                .subscribe(x => this.note$.next(x.note));
+            this._subscriptions.push(this._notesService.getBySlugAndCurrentUser({ slug: this._activatedRoute.snapshot.params["slug"] })
+                .subscribe(x => this.note$.next(x.note)));
         } else {
-            this._notesService.getByTitleAndCurrentUser({ title: moment().format(constants.DATE_FORMAT) })
-                .subscribe(x => this.note$.next(x.note == null ? new Note() : x.note));
+            this._subscriptions.push(this._notesService.getByTitleAndCurrentUser({ title: moment().format(constants.DATE_FORMAT) })
+                .subscribe(x => this.note$.next(x.note == null ? new Note() : x.note)));
         }
         window.scrollTo(0, 0);
     }
@@ -66,9 +67,9 @@ export class LandingPageComponent {
 
     ngAfterViewInit() {
 
-        this._tagsService.get().subscribe(x => this.tags$.next(x.tags));
+        this._subscriptions.push(this._tagsService.get().subscribe(x => this.tags$.next(x.tags)));
 
-        this._speechRecognitionService.finalTranscript$.subscribe(x => {
+        this._subscriptions.push(this._speechRecognitionService.finalTranscript$.subscribe(x => {
             if (x) {
                 this.quillEditorFormControl.patchValue(`${this.quillEditorFormControl.value}<p>${x}</p>`);
                 const correlationId = this._correlationIdsList.newId();
@@ -81,7 +82,7 @@ export class LandingPageComponent {
                     },
                 }).subscribe();
             }
-        });
+        }));
 
         this._eventHub.events.subscribe(x => {
             if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity)

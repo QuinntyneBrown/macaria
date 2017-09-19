@@ -82,6 +82,9 @@
       <DependentUpon>set-tenant-page.component.html</DependentUpon>
     </Content>
     <Content Include="ClientApp\app\pages\set-tenant-page.component.html" />
+    <Content Include="ClientApp\app\pages\tag-management-page.component.css">
+      <DependentUpon>tag-management-page.component.html</DependentUpon>
+    </Content>
     <Content Include="ClientApp\app\shared\components\hamburger-button.component.css">
       <DependentUpon>hamburger-button.component.html</DependentUpon>
     </Content>
@@ -111,6 +114,22 @@
     <Content Include="ClientApp\app\shared\components\header.component.css">
       <DependentUpon>header.component.html</DependentUpon>
     </Content>
+    <Content Include="ClientApp\app\shared\components\tag-edit-modal.component.css">
+      <DependentUpon>tag-edit-modal.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\tag-edit-modal.component.html" />
+    <Content Include="ClientApp\app\shared\components\tag-edit.component.css">
+      <DependentUpon>tag-edit.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\tag-edit.component.html" />
+    <Content Include="ClientApp\app\shared\components\tag-list-item.component.css">
+      <DependentUpon>tag-list-item.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\tag-list-item.component.html" />
+    <Content Include="ClientApp\app\shared\components\tag-list.component.css">
+      <DependentUpon>tag-list.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\tag-list.component.html" />
     <Content Include="ClientApp\app\shared\components\tag.component.css">
       <DependentUpon>tag.component.html</DependentUpon>
     </Content>
@@ -147,6 +166,7 @@
     <None Include="Properties\PublishProfiles\macaria - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\macaria - Web Deploy.pubxml" />
     <Content Include="ClientApp\app\pages\search-page.component.html" />
+    <Content Include="ClientApp\app\pages\tag-management-page.component.html" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
@@ -178,6 +198,9 @@
     <TypeScriptCompile Include="ClientApp\app\pages\set-tenant-page.component.ts">
       <DependentUpon>set-tenant-page.component.html</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\pages\tag-management-page.component.ts">
+      <DependentUpon>tag-management-page.component.html</DependentUpon>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\components\hamburger-button.component.ts">
       <DependentUpon>hamburger-button.component.html</DependentUpon>
     </TypeScriptCompile>
@@ -198,6 +221,18 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\components\set-tenant-form.component.ts">
       <DependentUpon>set-tenant-form.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\tag-edit-modal.component.ts">
+      <DependentUpon>tag-edit-modal.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\tag-edit.component.ts">
+      <DependentUpon>tag-edit.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\tag-list-item.component.ts">
+      <DependentUpon>tag-list-item.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\tag-list.component.ts">
+      <DependentUpon>tag-list.component.html</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\components\tag.component.ts">
       <DependentUpon>tag.component.html</DependentUpon>
