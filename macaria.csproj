@@ -251,6 +251,7 @@
     <TypeScriptCompile Include="ClientApp\app\shared\index.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\models\note.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\pages\pages.module.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\services\tenants.service.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

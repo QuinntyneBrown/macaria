@@ -16,8 +16,8 @@ import { constants } from "../constants";
 @Injectable()
 export class TenantGuardService implements CanActivate {
     constructor(
-        private _storage: Storage,
-        private _loginRedirectService: LoginRedirectService
+        private _loginRedirectService: LoginRedirectService,
+        private _storage: Storage        
     ) { }
 
     public canActivate(
