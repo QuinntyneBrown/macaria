@@ -12,6 +12,7 @@ import {FormGroup,FormControl,Validators} from "@angular/forms";
 import {Observable} from "rxjs/Observable";
 import {Router, NavigationEnd} from "@angular/router";
 import {Storage} from "../shared/services/storage.service";
+import {Tag} from "../shared/models/tag.model";
 
 declare var moment: any;
 
@@ -48,7 +49,7 @@ export class LandingPageComponent {
     }
 
     ngAfterViewInit() {
-
+   
         this._eventHub.events.subscribe(x => {
             if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity)
                 this.notes$.next(addOrUpdate({
@@ -97,6 +98,10 @@ export class LandingPageComponent {
     }
     
     private _saveSubscription: Subscription;
+
+    public tags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);
+
+    public selectedTags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);
 
     public notes$: BehaviorSubject<Array<Note>> = new BehaviorSubject([]);
 
