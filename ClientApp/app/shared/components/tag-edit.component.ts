@@ -1,7 +1,8 @@
 import { Tag } from "../models/tag.model";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 const template = require("./tag-edit.component.html");
-const styles = require("./tag-edit.component.scss");
+const styles = require("./tag-edit.component.css");
 
 export class TagEditComponent extends HTMLElement {
     constructor() {
@@ -23,13 +24,7 @@ export class TagEditComponent extends HTMLElement {
     
     private async _bind() {
         this._titleElement.textContent = this.tagId ? "Edit Tag": "Create Tag";
-
-        if (this.tagId) {
-            const tag: Tag = await this._tagService.getById(this.tagId);                
-            this._nameInputElement.value = tag.name;  
-        } else {
-            this._deleteButtonElement.style.display = "none";
-        }     
+        
     }
 
     private _setEventListeners() {
@@ -45,28 +40,21 @@ export class TagEditComponent extends HTMLElement {
     }
 
     public async onSave() {
-        const tag = {
-            id: this.tagId,
-            name: this._nameInputElement.value
-        } as Tag;
         
-        await this._tagService.add(tag);
-        this._router.navigate(["tag","list"]);
     }
 
     public async onDelete() {        
-        await this._tagService.remove({ id: this.tagId });
-        this._router.navigate(["tag","list"]);
+
     }
 
     public onTitleClick() {
-        this._router.navigate(["tag", "list"]);
+
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case "tag-id":
-                this.tagId = newValue;
+            case "tag":
+
                 break;
         }        
     }

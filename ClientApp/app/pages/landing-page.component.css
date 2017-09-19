@@ -7,12 +7,15 @@ ce-note-list {
     width: calc(100% - 40px);
 }
 
+ce-tags {
+    margin: 20px 20px 20px 20px;
+}
 
 ce-landing-page .ql-toolbar.ql-snow {
     border: 1px solid #fff !important;
 }
 
 ce-quill-text-editor {
-    height: calc(100vh - 82px);
+    height: calc(100vh - 151px);
     margin: 20px 20px 0px 20px;
 }

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ElementRef} from "@angular/core";
 import {Tag} from "../models/tag.model";
 
 @Component({
@@ -8,14 +8,12 @@ import {Tag} from "../models/tag.model";
 })
 export class TagsComponent {
 
-    constructor() {
+    constructor(private _elementRef: ElementRef) {
         this.tagClicked = new EventEmitter();
     }
 
-    ngOnInit() {
-
-    }
-
+    ngAfterViewInit() { }
+    
     @Output()
     public tagClicked: EventEmitter<any>;
 

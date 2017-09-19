@@ -1,11 +1,8 @@
 declare var System: any;
 
 const template = document.createElement("template");
-
-const promises = Promise.all([
-    System.import("./tag-edit-modal.component.html"),
-    System.import("./tag-edit-modal.component.css")
-]);
+const html = require("./tag-edit-modal.component.html");
+const css = require("./tag-edit-modal.component.css");
 
 export class TagEditModalComponent extends HTMLElement {
     constructor() {
@@ -17,10 +14,9 @@ export class TagEditModalComponent extends HTMLElement {
     }
 
     async connectedCallback() {
-
-        const assests = await promises;
         
-        template.innerHTML = `<style>${assests[1]}</style>${assests[0]}`; 
+        
+        template.innerHTML = `<style>${css}</style>${html}`; 
 
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(document.importNode(template.content, true));  

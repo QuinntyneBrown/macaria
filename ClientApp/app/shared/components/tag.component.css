@@ -1,4 +1,8 @@
 :host {
-    display:block;
-    content:contain;
+    display: inline-block;
+    user-select: none;
+    padding: 10px 10px 10px 10px;
+    margin: 5px 5px 5px 5px;
+    border: 2px solid rgb(155,155,155);
+    cursor:pointer;
 }

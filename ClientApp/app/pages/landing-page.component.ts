@@ -15,6 +15,7 @@ import {Storage} from "../shared/services/storage.service";
 import {Tag} from "../shared/models/tag.model";
 import {TagsService} from "../shared/services/tags.service";
 import {SpeechRecognitionService} from "../shared/services/speech-recognition.service";
+import {Ruler} from "../shared/services/ruler";
 
 declare var moment: any;
 
@@ -33,7 +34,8 @@ export class LandingPageComponent {
         private _router: Router,
         private _storage: Storage,
         private _tagsService: TagsService,
-        private _speechRecognitionService: SpeechRecognitionService
+        private _speechRecognitionService: SpeechRecognitionService,
+        private _ruler: Ruler
     ) {
         
     }
