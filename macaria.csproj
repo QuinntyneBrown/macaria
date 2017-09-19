@@ -235,6 +235,7 @@
     <TypeScriptCompile Include="ClientApp\app\shared\services\rectangle.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\ruler.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\space.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\services\speech-recognition.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\storage.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\tags.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\users.service.ts" />

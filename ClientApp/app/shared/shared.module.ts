@@ -19,6 +19,7 @@ import { UsersService } from "./services/users.service";
 import { NotesService } from "./services/notes.service";
 import { TagsService } from "./services/tags.service";
 import { TenantsService } from "./services/tenants.service";
+import { SpeechRecognitionService } from "./services/speech-recognition.service";
 
 import { AuthGuardService } from "./guards/auth-guard.service"
 import { TenantGuardService } from "./guards/tenant-guard.service";
@@ -60,6 +61,7 @@ const providers = [
     NotesService,
     TagsService,
     TenantsService,
+    SpeechRecognitionService,
     {
         provide: HTTP_INTERCEPTORS,
         useClass: JwtInterceptor,

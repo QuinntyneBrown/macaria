@@ -13,6 +13,8 @@ import {Observable} from "rxjs/Observable";
 import {Router, NavigationEnd} from "@angular/router";
 import {Storage} from "../shared/services/storage.service";
 import {Tag} from "../shared/models/tag.model";
+import {TagsService} from "../shared/services/tags.service";
+import {SpeechRecognitionService} from "../shared/services/speech-recognition.service";
 
 declare var moment: any;
 
@@ -29,7 +31,9 @@ export class LandingPageComponent {
         private _elementRef: ElementRef,
         private _eventHub: EventHub,
         private _router: Router,
-        private _storage: Storage
+        private _storage: Storage,
+        private _tagsService: TagsService,
+        private _speechRecognitionService: SpeechRecognitionService
     ) {
         
     }
@@ -48,8 +52,37 @@ export class LandingPageComponent {
         window.scrollTo(0, 0);
     }
 
+    ngOnInit() {
+        if (this._speechRecognitionService.isSupported) {
+            this._speechRecognitionService.start();
+        }
+    }
+
+    ngOnDestroy() {
+        if (this._speechRecognitionService.isSupported) {
+            this._speechRecognitionService.stop();
+        }
+    }
+
     ngAfterViewInit() {
-   
+
+        this._tagsService.get().subscribe(x => this.tags$.next(x.tags));
+
+        this._speechRecognitionService.finalTranscript$.subscribe(x => {
+            if (x) {
+                this.quillEditorFormControl.patchValue(`${this.quillEditorFormControl.value}<p>${x}</p>`);
+                const correlationId = this._correlationIdsList.newId();
+                this._notesService.addOrUpdate({
+                    correlationId,
+                    note: {
+                        id: this.note$.value.id,
+                        title: this.note$.value.title,
+                        body: this.quillEditorFormControl.value
+                    },
+                }).subscribe();
+            }
+        });
+
         this._eventHub.events.subscribe(x => {
             if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity)
                 this.notes$.next(addOrUpdate({
