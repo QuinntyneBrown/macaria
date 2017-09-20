@@ -1,3 +1,6 @@
-<ce-tag *ngFor="let tag of tags" [tag]="tag" [selectedTags]="selectedTags">
+<ce-tag *ngFor="let tag of tags" 
+        [tag]="tag" 
+        [selectedTags]="selectedTags"
+        (click)="tagClicked.emit({ tag: tag})">
 
 </ce-tag>

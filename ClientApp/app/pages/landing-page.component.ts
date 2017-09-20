@@ -16,6 +16,8 @@ import {Tag} from "../shared/models/tag.model";
 import {TagsService} from "../shared/services/tags.service";
 import {SpeechRecognitionService} from "../shared/services/speech-recognition.service";
 import {Ruler} from "../shared/services/ruler";
+import {pluckOut} from "../shared/utilities/pluck-out";
+import {addOrUpdate} from "../shared/utilities/add-or-update";
 
 declare var moment: any;
 
@@ -113,7 +115,10 @@ export class LandingPageComponent {
             }
         });
 
-        this.note$.subscribe(x => this.quillEditorFormControl.patchValue(x.body));
+        this.note$.subscribe(x => {
+            this.quillEditorFormControl.patchValue(x.body);
+            this.selectedTags$.next(x.tags);
+        });
 
         this.onNavigationEnd();
 
@@ -140,7 +145,26 @@ export class LandingPageComponent {
                 }).subscribe();
             }).subscribe();
     }
-    
+
+    public handleTagClicked($event) {
+        const tag = <Tag>$event.tag;
+        const correlationId = this._correlationIdsList.newId();
+
+        if (this.note$.value.tags.find((x) => x.id == tag.id) != null) {
+            this._notesService.removeTag({ noteId: this.note$.value.id, tagId: tag.id, correlationId })
+                .subscribe();
+
+            pluckOut({ items: this.note$.value.tags, value: tag.id });
+
+            return;
+        }
+
+        this._notesService.addTag({ noteId: this.note$.value.id, tagId: tag.id, correlationId })
+            .subscribe();
+
+        addOrUpdate({ items: this.note$.value.tags, item: tag });
+    }
+
     private _saveSubscription: Subscription;
 
     public tags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);

@@ -5,4 +5,10 @@
     margin: 5px 5px 5px 5px;
     border: 2px solid rgb(155,155,155);
     cursor:pointer;
+    background-color:#fff;
+}
+
+:host(.is-selected) {
+    background-color:rgb(0,88,173);
+    color:#fff;
 }

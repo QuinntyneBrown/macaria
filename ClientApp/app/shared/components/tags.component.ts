@@ -11,8 +11,6 @@ export class TagsComponent {
     constructor(private _elementRef: ElementRef) {
         this.tagClicked = new EventEmitter();
     }
-
-    ngAfterViewInit() { }
     
     @Output()
     public tagClicked: EventEmitter<any>;

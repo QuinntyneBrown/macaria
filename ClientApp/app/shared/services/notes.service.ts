@@ -17,6 +17,18 @@ export class NotesService {
             .catch(this._errorService.catchErrorResponse);
     }
 
+    public addTag(options: { noteId: number, tagId: number, correlationId: string }) {
+        return this._httpClient
+            .post(`${this._baseUrl}/api/notes/addTag`, options)
+            .catch(this._errorService.catchErrorResponse);
+    }
+
+    public removeTag(options: { noteId: number, tagId: number, correlationId: string }) {
+        return this._httpClient
+            .post(`${this._baseUrl}/api/notes/removeTag`, options)
+            .catch(this._errorService.catchErrorResponse);
+    }
+
     public get(): Observable<{ notes: Array<Note> }> {
         return this._httpClient
             .get<{ notes: Array<Note> }>(`${this._baseUrl}/api/notes/get`)

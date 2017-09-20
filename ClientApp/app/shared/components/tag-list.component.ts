@@ -9,7 +9,7 @@ import { Tag } from "../models/tag.model";
 export class TagListComponent {
     @Input()
     public tags: Array<Tag> = [];
-
+    
     @Output()
     public select: EventEmitter<any> = new EventEmitter();
 
