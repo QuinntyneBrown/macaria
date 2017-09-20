@@ -3,6 +3,7 @@ declare var System: any;
 const template = document.createElement("template");
 const html = require("./tag-edit-modal.component.html");
 const css = require("./tag-edit-modal.component.css");
+const modalCss = require("../../../styles/modal-window.css");
 
 export class TagEditModalComponent extends HTMLElement {
     constructor() {
@@ -16,7 +17,7 @@ export class TagEditModalComponent extends HTMLElement {
     async connectedCallback() {
         
         
-        template.innerHTML = `<style>${css}</style>${html}`; 
+        template.innerHTML = `<style>${[modalCss,css].join(' ')}</style>${html}`; 
 
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(document.importNode(template.content, true));  

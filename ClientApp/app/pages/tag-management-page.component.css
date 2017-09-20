@@ -2,3 +2,11 @@
     display:block;
     content:contain;
 }
+
+.container {
+    margin:20px 20px 20px 20px;
+}
+
+.container > a {
+    line-height:3em;
+}

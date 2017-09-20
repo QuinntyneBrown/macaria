@@ -85,6 +85,10 @@
     <Content Include="ClientApp\app\pages\tag-management-page.component.css">
       <DependentUpon>tag-management-page.component.html</DependentUpon>
     </Content>
+    <Content Include="ClientApp\app\shared\components\backdrop.component.css">
+      <DependentUpon>backdrop.component.html</DependentUpon>
+    </Content>
+    <Content Include="ClientApp\app\shared\components\backdrop.component.html" />
     <Content Include="ClientApp\app\shared\components\hamburger-button.component.css">
       <DependentUpon>hamburger-button.component.html</DependentUpon>
     </Content>
@@ -200,6 +204,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\pages\tag-management-page.component.ts">
       <DependentUpon>tag-management-page.component.html</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\components\backdrop.component.ts">
+      <DependentUpon>backdrop.component.html</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\components\hamburger-button.component.ts">
       <DependentUpon>hamburger-button.component.html</DependentUpon>

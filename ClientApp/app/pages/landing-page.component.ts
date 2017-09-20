@@ -17,7 +17,6 @@ import {TagsService} from "../shared/services/tags.service";
 import {SpeechRecognitionService} from "../shared/services/speech-recognition.service";
 import {Ruler} from "../shared/services/ruler";
 import {pluckOut} from "../shared/utilities/pluck-out";
-import {addOrUpdate} from "../shared/utilities/add-or-update";
 
 declare var moment: any;
 
@@ -70,15 +69,14 @@ export class LandingPageComponent {
     }
 
     async ngAfterViewInit() {
-        setTimeout(async () => {
-            var rect = await this._ruler.measure(this.tagsElement);
-            var quillTextEditorHeight = this.viewPortHeight - (102 + rect.height);            
-            (this._elementRef.nativeElement as HTMLElement).style.setProperty("--quill-text-editor-height", `${quillTextEditorHeight}px`);
-
-        }, 500);
         
         this._subscriptions.push(this._tagsService.get().subscribe(x => {
             this.tags$.next(x.tags);
+            setTimeout(async () => {
+                var rect = await this._ruler.measure(this.tagsElement);
+                var quillTextEditorHeight = this.viewPortHeight - (102 + rect.height);
+                (this._elementRef.nativeElement as HTMLElement).style.setProperty("--quill-text-editor-height", `${quillTextEditorHeight}px`);
+            }, 0);
         }));
 
         this._subscriptions.push(this._speechRecognitionService.finalTranscript$.subscribe(x => {

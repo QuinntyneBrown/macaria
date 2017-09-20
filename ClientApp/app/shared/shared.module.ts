@@ -44,6 +44,7 @@ import { TagListComponent } from "./components/tag-list.component";
 import "./components/menu.component";
 import "./components/tag-edit-modal.component";
 import "./components/tag-edit.component";
+import "./components/backdrop.component";
 
 const providers = [
     EventHub,
