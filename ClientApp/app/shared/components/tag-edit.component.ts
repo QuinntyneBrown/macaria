@@ -2,7 +2,8 @@ import { Tag } from "../models/tag.model";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 const template = require("./tag-edit.component.html");
-const styles = require("./tag-edit.component.css");
+const css = require("./tag-edit.component.css");
+const formsCss = require("../../../styles/forms.css");
 
 export class TagEditComponent extends HTMLElement {
     constructor() {
@@ -17,7 +18,7 @@ export class TagEditComponent extends HTMLElement {
     }
     
     connectedCallback() {        
-        this.innerHTML = `<style>${styles}</style> ${template}`; 
+        this.innerHTML = `<style>${[formsCss,css].join(' ')}</style> ${template}`; 
         this._bind();
         this._setEventListeners();
     }

@@ -1,5 +1,17 @@
 :host {
-    display:block;
-    width:100%;
-    height:100%;
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+ce-tag-edit {
+    display: block;
+    background-color: #fff;
+    height: 400px;
+    width: 800px;
+    margin: 0 auto;
+    position: relative;
 }

@@ -1,7 +1,19 @@
 :host {
     display:block;
-    background-color:#fff;
-    width:400px;
-    height:300px;
-    margin: 0 auto;
+    width: calc(100% - 40px);
+    margin:100px 0px 0px 0px;
+}
+
+h2 {
+    margin: 0px 20px 0px 20px;
+    line-height:3em;
+}
+
+form {
+    margin: 0px 20px 0px 20px;
+}
+
+
+input[type=text] {
+    width: calc(100% - 61px);
 }
