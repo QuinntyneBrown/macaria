@@ -16,6 +16,6 @@ ce-landing-page .ql-toolbar.ql-snow {
 }
 
 ce-quill-text-editor {
-    height: calc(100vh - 151px);
+    height: var(--quill-text-editor-height,300px);
     margin: 20px 20px 0px 20px;
 }

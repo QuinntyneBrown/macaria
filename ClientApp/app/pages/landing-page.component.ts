@@ -67,9 +67,17 @@ export class LandingPageComponent {
         }
     }
 
-    ngAfterViewInit() {
+    async ngAfterViewInit() {
+        setTimeout(async () => {
+            var rect = await this._ruler.measure(this.tagsElement);
+            var quillTextEditorHeight = this.viewPortHeight - (102 + rect.height);            
+            (this._elementRef.nativeElement as HTMLElement).style.setProperty("--quill-text-editor-height", `${quillTextEditorHeight}px`);
 
-        this._subscriptions.push(this._tagsService.get().subscribe(x => this.tags$.next(x.tags)));
+        }, 500);
+        
+        this._subscriptions.push(this._tagsService.get().subscribe(x => {
+            this.tags$.next(x.tags);
+        }));
 
         this._subscriptions.push(this._speechRecognitionService.finalTranscript$.subscribe(x => {
             if (x) {
@@ -141,5 +149,9 @@ export class LandingPageComponent {
 
     public notes$: BehaviorSubject<Array<Note>> = new BehaviorSubject([]);
 
-    public note$: BehaviorSubject<Note> = new BehaviorSubject(new Note());    
+    public note$: BehaviorSubject<Note> = new BehaviorSubject(new Note());  
+
+    public get tagsElement() { return this._elementRef.nativeElement.querySelector("ce-tags"); }
+
+    public get viewPortHeight() { return Math.max(document.documentElement.clientHeight, window.innerHeight || 0); }
 }
