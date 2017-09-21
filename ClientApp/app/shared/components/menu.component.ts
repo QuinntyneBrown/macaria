@@ -27,7 +27,7 @@ export class MenuComponent extends HTMLElement {
         this._setEventListeners();
     }
 
-    private _setEventListeners() {
+    private _setEventListeners() {        
         for (let i = 0; i < this.menuItemElements.length; i++) {
             this.menuItemElements[i].addEventListener("click", this._onMenuItemClick);
         }

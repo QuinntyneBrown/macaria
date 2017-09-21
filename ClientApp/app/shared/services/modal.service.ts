@@ -2,8 +2,7 @@
 import { createElement } from "../utilities/create-element";
 
 @Injectable()
-export class ModalService {
-
+export class ModalService {    
     public static get instance() {
         this._instance = this._instance || new ModalService();
         return this._instance;

@@ -61,7 +61,11 @@ const providers = [
     Space,
     Ruler,
     Position,
-    ModalService,
+    {
+        provide: ModalService,
+        useFactory: (): ModalService => ModalService.instance,
+        deps: []
+    },
     UsersService,
     NotesService,
     TagsService,

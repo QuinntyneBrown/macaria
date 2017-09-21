@@ -10,3 +10,7 @@
 .container > a {
     line-height:3em;
 }
+
+a {
+    cursor:pointer;
+}

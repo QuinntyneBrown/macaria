@@ -38,7 +38,7 @@ export class LandingPageComponent {
         private _speechRecognitionService: SpeechRecognitionService,
         private _ruler: Ruler
     ) {
-        
+        this.onSaveTagClick = this.onSaveTagClick.bind(this);
     }
     
     public quillEditorFormControl: FormControl = new FormControl('');
@@ -56,10 +56,16 @@ export class LandingPageComponent {
         window.scrollTo(0, 0);
     }
 
-    ngOnInit() {
+    onSaveTagClick(e) {
+        
+        const correlationId = this._correlationIdsList.newId();
+        this._tagsService.addOrUpdate({ tag: e.detail.tag, correlationId }).subscribe();
+    }
+
+    ngOnInit() {        
         if (this._speechRecognitionService.isSupported) {
             this._speechRecognitionService.start();
-        }
+        }        
     }
 
     ngOnDestroy() {
@@ -95,13 +101,14 @@ export class LandingPageComponent {
         }));
 
         this._eventHub.events.subscribe(x => {
-            if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity)
+            
+            if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity && x.type == "[Notes] NoteAddedOrUpdated")
                 this.notes$.next(addOrUpdate({
                     item: x.payload.entity,
                     items: this.notes$.value
                 }));
 
-            if (!this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity) {
+            if (!this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity && x.type == "[Notes] NoteAddedOrUpdatedFailed") {
                 this.notes$.next(addOrUpdate({
                     item: x.payload.entity,
                     items: this.notes$.value

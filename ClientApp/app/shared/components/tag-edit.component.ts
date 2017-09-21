@@ -5,7 +5,7 @@ const template = require("./tag-edit.component.html");
 const css = require("./tag-edit.component.css");
 const formsCss = require("../../../styles/forms.css");
 
-const SAVE_TAG_CLICK = "[Tags] SAVE TAG";
+export const SAVE_TAG_CLICK = "[Tags] SAVE TAG";
 
 export class TagEditComponent extends HTMLElement {
     constructor() {
@@ -28,7 +28,7 @@ export class TagEditComponent extends HTMLElement {
     private async _bind() {
         this.tag$.subscribe(x => {
             this._titleElement.textContent = x.id ? "Edit Tag" : "Create Tag";
-            this._nameInputElement.value = x.name;
+            this._nameInputElement.value = x.name ? x.name : null;
         });        
     }
 
@@ -40,7 +40,10 @@ export class TagEditComponent extends HTMLElement {
         this._saveButtonElement.removeEventListener("click", this.onSave);
     }
 
-    public async onSave() {
+    public async onSave(e: Event) {
+        e.stopPropagation();
+        e.preventDefault();
+
         this.dispatchEvent(customEvents.create({
             name: SAVE_TAG_CLICK, detail: {
                 tag: {
