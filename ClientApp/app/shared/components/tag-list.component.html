@@ -1,1 +1,4 @@
-<ce-tag-list-item *ngFor="let tag of tags" [tag]="tag" (select)="select.emit($event)" (delete)="delete.emit($event)"></ce-tag-list-item>
+<ce-tag-list-item *ngFor="let tag of tags" 
+                  [tag]="tag" 
+                  (edit)="edit.emit($event)" 
+                  (delete)="delete.emit($event)"></ce-tag-list-item>

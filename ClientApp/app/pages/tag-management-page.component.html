@@ -1,5 +1,7 @@
 <div class="container">
     <h1>Tags</h1>
     <a (click)="openEditTagModal()">Create Tag</a>
-    <ce-tag-list [tags]="tags"></ce-tag-list>
+    <ce-tag-list [tags]="tags$ | async"
+                 (edit)="onEdit($event)"
+                 (delete)="onDelete($event)"></ce-tag-list>
 </div>

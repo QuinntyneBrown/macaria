@@ -7,6 +7,7 @@ import {CorrelationIdsList} from "../shared/services/correlation-ids-list";
 import {addOrUpdate} from "../shared/utilities/add-or-update";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {EventHub} from "../shared/services/event-hub";
+import {pluckOut} from "../shared/utilities/pluck-out";
 
 @Component({
     templateUrl: "./tag-management-page.component.html",
@@ -23,14 +24,38 @@ export class TagManagementPageComponent {
     }
 
     ngOnInit() {
-        this._tagsService.get().subscribe(x => this.tags = x.tags);
+        this._tagsService.get().subscribe(x => this.tags$.next(x.tags));
 
         document.body.addEventListener(SAVE_TAG, this.onSaveTagClick);
 
         this._eventHub.events.subscribe(x => {
-            if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity && x.type == "[Tags] TagAddedOrUpdated")
-                alert("tag");
+            if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity && x.type == "[Tags] TagAddedOrUpdated") {                
+                this.tags$.next(addOrUpdate({
+                    items: this.tags$.value,
+                    item: x.payload.entity
+                }));
+            }
         });
+    }
+
+    onEdit($event) {
+        this._modalService.open({
+            html: `<ce-tag-edit-modal tag='${JSON.stringify($event.detail.tag)}'></ce-tag-edit-modal>`
+        });
+    }
+
+    onDelete($event) {
+        const correlationId = this._correlationIdsList.newId();
+
+        this._tagsService.remove({
+            tag: $event.detail.tag,
+            correlationId
+        }).subscribe();
+
+        this.tags$.next(pluckOut({
+            items: this.tags$.value,
+            value: $event.detail.tag.id
+        }));
     }
 
     ngOnDestroy() {
@@ -48,5 +73,5 @@ export class TagManagementPageComponent {
         });
     }
 
-    public tags: Array<Tag> = [];
+    public tags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);
 }

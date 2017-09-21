@@ -11,7 +11,7 @@ export class TagListComponent {
     public tags: Array<Tag> = [];
     
     @Output()
-    public select: EventEmitter<any> = new EventEmitter();
+    public edit: EventEmitter<any> = new EventEmitter();
 
     @Output()
     public delete: EventEmitter<any> = new EventEmitter();
