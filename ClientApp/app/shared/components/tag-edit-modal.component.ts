@@ -1,5 +1,3 @@
-declare var System: any;
-
 const template = document.createElement("template");
 const html = require("./tag-edit-modal.component.html");
 const css = require("./tag-edit-modal.component.css");
