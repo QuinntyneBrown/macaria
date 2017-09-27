@@ -1,21 +1,20 @@
-import {Component, ElementRef } from "@angular/core";
-import {NotesService} from "../shared/services/notes.service";
-import {Note} from "../shared/models/note.model";
-import {constants} from "../shared/constants";
-import {CorrelationIdsList} from "../shared/services/correlation-ids-list";
-import {addOrUpdate} from "../shared/utilities/add-or-update";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {EventHub} from "../shared/services/event-hub";
-import {ActivatedRoute} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
+import {Component, ElementRef} from "@angular/core";
 import {FormGroup,FormControl,Validators} from "@angular/forms";
-import {Observable} from "rxjs/Observable";
+import {ActivatedRoute} from "@angular/router";
 import {Router, NavigationEnd} from "@angular/router";
-import {Storage} from "../shared/services/storage.service";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {Observable} from "rxjs/Observable";
+import {Subscription} from "rxjs/Subscription";
+import {constants} from "../shared/constants";
+import {Note} from "../shared/models/note.model";
 import {Tag} from "../shared/models/tag.model";
-import {TagsService} from "../shared/services/tags.service";
+import {NotesService} from "../shared/services/notes.service";
+import {CorrelationIdsList} from "../shared/services/correlation-ids-list";
+import {EventHub} from "../shared/services/event-hub";
 import {SpeechRecognitionService} from "../shared/services/speech-recognition.service";
-import {Ruler} from "../shared/services/ruler";
+import {Storage} from "../shared/services/storage.service";
+import {TagsService} from "../shared/services/tags.service";
+import {addOrUpdate} from "../shared/utilities/add-or-update";
 import {pluckOut} from "../shared/utilities/pluck-out";
 
 declare var moment: any;
@@ -35,8 +34,7 @@ export class LandingPageComponent {
         private _router: Router,
         private _storage: Storage,
         private _tagsService: TagsService,
-        private _speechRecognitionService: SpeechRecognitionService,
-        private _ruler: Ruler
+        private _speechRecognitionService: SpeechRecognitionService
     ) {
         this.onSaveTagClick = this.onSaveTagClick.bind(this);
     }
@@ -56,26 +54,22 @@ export class LandingPageComponent {
         window.scrollTo(0, 0);
     }
 
-    onSaveTagClick(e) {
-        
+    onSaveTagClick(e) {        
         const correlationId = this._correlationIdsList.newId();
         this._tagsService.addOrUpdate({ tag: e.detail.tag, correlationId }).subscribe();
     }
 
     ngOnInit() {        
-        if (this._speechRecognitionService.isSupported) {
+        if (this._speechRecognitionService.isSupported)
             this._speechRecognitionService.start();
-        }        
     }
 
     ngOnDestroy() {
-        if (this._speechRecognitionService.isSupported) {
-            this._speechRecognitionService.stop();
-        }
+        if (this._speechRecognitionService.isSupported)
+            this._speechRecognitionService.stop();        
     }
 
-    async ngAfterViewInit() {
-        
+    async ngAfterViewInit() {        
         this._subscriptions.push(this._tagsService.get().subscribe(x => this.tags$.next(x.tags)));
 
         this._subscriptions.push(this._speechRecognitionService.finalTranscript$.subscribe(x => {
@@ -93,8 +87,7 @@ export class LandingPageComponent {
             }
         }));
 
-        this._eventHub.events.subscribe(x => {
-            
+        this._eventHub.events.subscribe(x => {            
             if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity && x.type == "[Notes] NoteAddedOrUpdated")
                 this.notes$.next(addOrUpdate({
                     item: x.payload.entity,
@@ -107,9 +100,8 @@ export class LandingPageComponent {
                     items: this.notes$.value
                 }));
                 
-                if (x.tenantUniqueId == this._storage.get({ name: constants.TENANT }) && this.note$.value.id == x.payload.entity.id) {
-                    this.note$.next(x.payload.entity);
-                }                
+                if (x.tenantUniqueId == this._storage.get({ name: constants.TENANT }) && this.note$.value.id == x.payload.entity.id)
+                    this.note$.next(x.payload.entity);                                
             }
         });
 
@@ -172,8 +164,4 @@ export class LandingPageComponent {
     public notes$: BehaviorSubject<Array<Note>> = new BehaviorSubject([]);
 
     public note$: BehaviorSubject<Note> = new BehaviorSubject(new Note());  
-
-    public get tagsElement() { return this._elementRef.nativeElement.querySelector("ce-tags"); }
-
-    public get viewPortHeight() { return Math.max(document.documentElement.clientHeight, window.innerHeight || 0); }
 }
