@@ -1,5 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { constants } from "../constants";
 
 declare var webkitSpeechRecognition: any;
 
@@ -11,7 +12,7 @@ export class SpeechRecognitionService {
         this._onResult = this._onResult.bind(this);
         this._onEnd = this._onEnd.bind(this);
 
-        if (this.isSupported) {
+        if (constants.SUPPORTS_SPEECH_RECOGNITION) {
             this._recognition = new webkitSpeechRecognition();
             this._recognition.continuous = true;
             this._recognition.interimResults = true;
@@ -24,9 +25,7 @@ export class SpeechRecognitionService {
     }
 
     public finalTranscript$: BehaviorSubject<string> = new BehaviorSubject('');
-
-    public get isSupported(): boolean { return ('webkitSpeechRecognition' in window); }
-
+    
     private _onStart() {
         this._recognizing = true;
     }

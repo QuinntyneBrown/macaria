@@ -20,8 +20,7 @@ export class TagManagementPageComponent {
         private _eventHub: EventHub,
         private _modalService: ModalService,
         private _tagsService: TagsService) {
-        this.onSaveTagClick = this.onSaveTagClick.bind(this);
-        
+        this.onSaveTagClick = this.onSaveTagClick.bind(this);        
     }
 
 

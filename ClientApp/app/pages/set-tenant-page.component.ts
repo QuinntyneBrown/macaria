@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
-import { Storage } from "../shared/services/storage.service";
-import { constants } from "../shared/constants";
-import { LoginRedirectService } from "../shared/services/login-redirect.service";
-import { TenantsService } from "../shared/services/tenants.service";
+import {Component} from "@angular/core";
+import {constants} from "../shared/constants";
+import {LoginRedirectService} from "../shared/services/login-redirect.service";
+import {Storage} from "../shared/services/storage.service";
+import {TenantsService} from "../shared/services/tenants.service";
 
 @Component({
     templateUrl: "./set-tenant-page.component.html",

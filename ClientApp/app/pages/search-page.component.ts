@@ -1,10 +1,10 @@
-import { Component, ElementRef } from "@angular/core";
-import { NotesService } from "../shared/services/notes.service";
-import { Note } from "../shared/models/note.model";
-import { Tag } from "../shared/models/tag.model";
-import { Router } from "@angular/router";
-import { NOTE_TILE_CLICKED } from "../shared/components/note-tile.component";
-import { TagsService } from "../shared/services/tags.service";
+import {Component,ElementRef} from "@angular/core";
+import {Router} from "@angular/router";
+import {NOTE_TILE_CLICKED} from "../shared/components/note-tile.component";
+import {Note} from "../shared/models/note.model";
+import {Tag} from "../shared/models/tag.model";
+import {NotesService} from "../shared/services/notes.service";
+import {TagsService} from "../shared/services/tags.service";
 
 @Component({
     templateUrl: "./search-page.component.html",
@@ -25,11 +25,8 @@ export class SearchPageComponent {
 
     ngOnInit() {
         this._notesService.getByCurrentUser().subscribe(x => this.notes = x.notes);
-
         this._tagsService.get().subscribe(x => this.tags = x.tags);
-
         this._elementRef.nativeElement.addEventListener(NOTE_TILE_CLICKED, this.onNoteTileClicked);
-
     }
 
     public onNoteTileClicked(e: any) {

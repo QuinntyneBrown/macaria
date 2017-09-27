@@ -36,7 +36,7 @@ export class LandingPageComponent {
         private _tagsService: TagsService,
         private _speechRecognitionService: SpeechRecognitionService
     ) {
-        this.onSaveTagClick = this.onSaveTagClick.bind(this);
+        this.onSaveTagClick = this.onSaveTagClick.bind(this);        
     }
     
     public quillEditorFormControl: FormControl = new FormControl('');
@@ -60,12 +60,12 @@ export class LandingPageComponent {
     }
 
     ngOnInit() {        
-        if (this._speechRecognitionService.isSupported)
+        if (constants.SUPPORTS_SPEECH_RECOGNITION)
             this._speechRecognitionService.start();
     }
 
     ngOnDestroy() {
-        if (this._speechRecognitionService.isSupported)
+        if (constants.SUPPORTS_SPEECH_RECOGNITION)
             this._speechRecognitionService.stop();        
     }
 
