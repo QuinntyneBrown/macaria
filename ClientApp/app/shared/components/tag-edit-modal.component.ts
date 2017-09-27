@@ -26,8 +26,7 @@ export class TagEditModalComponent extends HTMLElement {
 
     async connectedCallback() {
         
-        
-        template.innerHTML = `<style>${[modalCss,css].join(' ')}</style>${html}`; 
+        template.innerHTML = `<style>${[css].join(' ')}</style>${html}`; 
 
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(document.importNode(template.content, true));  

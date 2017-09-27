@@ -1,4 +1,8 @@
 <label>Search</label>
 <input type="text" placeholder="Search" [formControl]="searchInputFormControl" />
 
+<ce-tags [tags]="tags"
+         (tagClicked)="onTagClick($event)"
+         [selectedTags]="selectedTags"></ce-tags>
+
 <ce-note-tile *ngFor="let note of notes" [note]="note"></ce-note-tile>

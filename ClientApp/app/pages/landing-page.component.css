@@ -1,21 +1,12 @@
 :host {
-    display:block;
-}
-
-ce-note-list {
-    margin:20px 20px 20px 20px;
-    width: calc(100% - 40px);
-}
-
-ce-tags {
-    margin: 20px 20px 20px 20px;
+    display:grid;
+    grid-template-columns:1fr;
+    grid-template-rows: 1fr min-content;
+    grid-gap:20px;
+    margin:20px;
+    height:calc(100% - 20px);
 }
 
 ce-landing-page .ql-toolbar.ql-snow {
     border: 1px solid #fff !important;
-}
-
-ce-quill-text-editor {
-    height: var(--quill-text-editor-height,300px);
-    margin: 20px 20px 0px 20px;
 }

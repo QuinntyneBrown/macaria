@@ -21,7 +21,9 @@ export class TagManagementPageComponent {
         private _modalService: ModalService,
         private _tagsService: TagsService) {
         this.onSaveTagClick = this.onSaveTagClick.bind(this);
+        
     }
+
 
     ngOnInit() {
         this._tagsService.get().subscribe(x => this.tags$.next(x.tags));

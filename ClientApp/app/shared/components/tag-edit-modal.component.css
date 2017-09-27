@@ -1,17 +1,19 @@
 :host {
     z-index: 1000;
     position: fixed;
+    display:block;
     top: 0;
     left: 0;
     height: 100%;
-    width: 100%;
+    width:100%;
 }
 
-ce-tag-edit {
+.container {
     display: block;
     background-color: #fff;
     height: 400px;
-    width: 800px;
-    margin: 0 auto;
+    width:100%;
+    max-width: 800px;
+    margin: 100px auto 0px;
     position: relative;
 }

@@ -1,8 +1,3 @@
 :host {
     display:block;
-    content:contain;
-}
-
-ce-tag:first-of-type {
-    margin: 5px 5px 5px 0px;
 }

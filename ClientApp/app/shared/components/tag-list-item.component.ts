@@ -11,7 +11,7 @@ import {Component,Input,Output,EventEmitter} from "@angular/core";
 export class TagListItemComponent {  
     constructor() {
         this.edit = new EventEmitter();
-        this.delete = new EventEmitter();		
+        this.delete = new EventEmitter();	
     }
       
     @Input()

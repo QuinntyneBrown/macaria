@@ -76,14 +76,7 @@ export class LandingPageComponent {
 
     async ngAfterViewInit() {
         
-        this._subscriptions.push(this._tagsService.get().subscribe(x => {
-            this.tags$.next(x.tags);
-            setTimeout(async () => {
-                var rect = await this._ruler.measure(this.tagsElement);
-                var quillTextEditorHeight = this.viewPortHeight - (102 + rect.height);
-                (this._elementRef.nativeElement as HTMLElement).style.setProperty("--quill-text-editor-height", `${quillTextEditorHeight}px`);
-            }, 0);
-        }));
+        this._subscriptions.push(this._tagsService.get().subscribe(x => this.tags$.next(x.tags)));
 
         this._subscriptions.push(this._speechRecognitionService.finalTranscript$.subscribe(x => {
             if (x) {
