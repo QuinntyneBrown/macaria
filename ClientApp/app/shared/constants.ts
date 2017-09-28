@@ -6,5 +6,6 @@
     TENANT: "TENANT",
     CORRELATION_IDS_KEY: "CORRELATION_IDS_KEY",
     DATE_FORMAT: "MMMM D, YYYY",
-    SUPPORTS_SPEECH_RECOGNITION: 'webkitSpeechRecognition' in window
+    SUPPORTS_SPEECH_RECOGNITION: 'webkitSpeechRecognition' in window,
+    TENANTS: "TENANTS"
 };

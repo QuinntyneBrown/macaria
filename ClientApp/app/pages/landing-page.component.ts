@@ -1,7 +1,7 @@
 import {Component, ElementRef} from "@angular/core";
 import {FormGroup,FormControl,Validators} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
-import {Router, NavigationEnd} from "@angular/router";
+import {Router} from "@angular/router";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Observable} from "rxjs/Observable";
 import {Subscription} from "rxjs/Subscription";
@@ -36,23 +36,20 @@ export class LandingPageComponent {
         private _tagsService: TagsService,
         private _speechRecognitionService: SpeechRecognitionService
     ) {
-        this.onSaveTagClick = this.onSaveTagClick.bind(this);        
+        this.onSaveTagClick = this.onSaveTagClick.bind(this);   
+
+        _activatedRoute.params.flatMap(params => {                    
+            return params["slug"] != null
+                ? _notesService.getBySlugAndCurrentUser({ slug: params["slug"] })
+                : _notesService.getByTitleAndCurrentUser({ title: moment().format(constants.DATE_FORMAT) })
+        })
+        .map(x => x.note)
+        .subscribe(note => this.note$.next(note || this.note$.value));
     }
     
     public quillEditorFormControl: FormControl = new FormControl('');
     
     private _subscriptions: Array<Subscription> = [];
-
-    public onNavigationEnd() {
-        if (this._activatedRoute.snapshot.params["slug"]) {
-            this._subscriptions.push(this._notesService.getBySlugAndCurrentUser({ slug: this._activatedRoute.snapshot.params["slug"] })
-                .subscribe(x => this.note$.next(x.note)));
-        } else {
-            this._subscriptions.push(this._notesService.getByTitleAndCurrentUser({ title: moment().format(constants.DATE_FORMAT) })
-                .subscribe(x => this.note$.next(x.note == null ? new Note() : x.note)));
-        }
-        window.scrollTo(0, 0);
-    }
 
     onSaveTagClick(e) {        
         const correlationId = this._correlationIdsList.newId();
@@ -87,53 +84,35 @@ export class LandingPageComponent {
             }
         }));
 
-        this._eventHub.events.subscribe(x => {            
-            if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity && x.type == "[Notes] NoteAddedOrUpdated")
-                this.notes$.next(addOrUpdate({
-                    item: x.payload.entity,
-                    items: this.notes$.value
-                }));
 
-            if (!this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity && x.type == "[Notes] NoteAddedOrUpdatedFailed") {
-                this.notes$.next(addOrUpdate({
-                    item: x.payload.entity,
-                    items: this.notes$.value
-                }));
-                
-                if (x.tenantUniqueId == this._storage.get({ name: constants.TENANT }) && this.note$.value.id == x.payload.entity.id)
-                    this.note$.next(x.payload.entity);                                
-            }
+        this._eventHub.events.subscribe(x => {                                    
+            if (!this._correlationIdsList.hasId(x.payload.correlationId)
+                && x.type == "[Notes] NoteAddedOrUpdated"
+                && x.tenantUniqueId == this._storage.get({ name: constants.TENANT })
+                && this.note$.value.id == x.payload.entity.id)
+                this.note$.next(x.payload.entity);                                            
         });
 
-        this.note$.subscribe(x => {
+        this.note$
+            .filter(x => x != null)
+            .subscribe(x => {            
             this.quillEditorFormControl.patchValue(x.body);
             this.selectedTags$.next(x.tags);
         });
-
-        this.onNavigationEnd();
-
-        this._router.events.subscribe((val) => {
-            if (val instanceof NavigationEnd) {
-                this.onNavigationEnd();
-            }
-        });
         
-        this._notesService.getByCurrentUser().subscribe(x => this.notes$.next(x.notes)); 
-
         Observable
             .fromEvent(this._elementRef.nativeElement.querySelector("ce-quill-text-editor"), "keyup")
             .debounce(() => Observable.timer(300))
-            .map(() => {
-                const correlationId = this._correlationIdsList.newId();
-                this._notesService.addOrUpdate({
+            .map(() => this._correlationIdsList.newId())
+            .switchMap((correlationId) => this._notesService.addOrUpdate({
                     correlationId,
                     note: {
                         id: this.note$.value.id,
                         title: this.note$.value.title,
                         body: this.quillEditorFormControl.value
                     },
-                }).subscribe();
-            }).subscribe();
+                }))
+            .subscribe();
     }
 
     public handleTagClicked($event) {
@@ -160,8 +139,6 @@ export class LandingPageComponent {
     public tags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);
 
     public selectedTags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);
-
-    public notes$: BehaviorSubject<Array<Note>> = new BehaviorSubject([]);
-
+    
     public note$: BehaviorSubject<Note> = new BehaviorSubject(new Note());  
 }

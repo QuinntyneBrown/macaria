@@ -3,6 +3,7 @@ import {constants} from "../shared/constants";
 import {LoginRedirectService} from "../shared/services/login-redirect.service";
 import {Storage} from "../shared/services/storage.service";
 import {TenantsService} from "../shared/services/tenants.service";
+import {addOrUpdate} from "../shared/utilities/add-or-update";
 
 @Component({
     templateUrl: "./set-tenant-page.component.html",
@@ -24,8 +25,6 @@ export class SetTenantPageComponent {
                 this._storage.put({ name: constants.TENANT, value: null });
                 throw new Error("");
             })
-            .subscribe(() => {
-            this._loginRedirectService.redirectPreLogin();
-        });
+            .subscribe(() => this._loginRedirectService.redirectPreLogin());
     }
 }
