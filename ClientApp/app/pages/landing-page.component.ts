@@ -1,26 +1,26 @@
-import {Component, ElementRef} from "@angular/core";
-import {FormGroup,FormControl,Validators} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
-import {Router} from "@angular/router";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {Observable} from "rxjs/Observable";
-import {Subject} from "rxjs/Subject";
-import {Subscription} from "rxjs/Subscription";
-import {constants} from "../shared/constants";
-import {Note} from "../shared/models/note.model";
-import {Tag} from "../shared/models/tag.model";
-import {NotesService} from "../shared/services/notes.service";
-import {CorrelationIdsList} from "../shared/services/correlation-ids-list";
-import {EventHub} from "../shared/services/event-hub";
-import {SpeechRecognitionService} from "../shared/services/speech-recognition.service";
-import {Storage} from "../shared/services/storage.service";
-import {TagsService} from "../shared/services/tags.service";
-import {addOrUpdate} from "../shared/utilities/add-or-update";
-import {pluckOut} from "../shared/utilities/pluck-out";
+import { Component, ElementRef } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
+import { Subscription } from "rxjs/Subscription";
+import { constants } from "../shared/constants";
+import { Note } from "../shared/models/note.model";
+import { Tag } from "../shared/models/tag.model";
+import { NotesService } from "../shared/services/notes.service";
+import { CorrelationIdsList } from "../shared/services/correlation-ids-list";
+import { EventHub } from "../shared/services/event-hub";
+import { SpeechRecognitionService } from "../shared/services/speech-recognition.service";
+import { Storage } from "../shared/services/storage.service";
+import { TagsService } from "../shared/services/tags.service";
+import { addOrUpdate } from "../shared/utilities/add-or-update";
+import { pluckOut } from "../shared/utilities/pluck-out";
 
 declare var moment: any;
 
-const NOTE_ADDED_OR_UPDATED = "[Notes] NoteAddedOrUpdated"; 
+const NOTE_ADDED_OR_UPDATED = "[Notes] NoteAddedOrUpdated";
 
 @Component({
     templateUrl: "./landing-page.component.html",
@@ -39,27 +39,27 @@ export class LandingPageComponent {
         private _tagsService: TagsService,
         private _speechRecognitionService: SpeechRecognitionService
     ) {
-        this.onSaveTagClick = this.onSaveTagClick.bind(this);   
+        this.onSaveTagClick = this.onSaveTagClick.bind(this);
 
-        _activatedRoute.params.flatMap(params => {                    
+        _activatedRoute.params.flatMap(params => {
             return params["slug"] != null
                 ? _notesService.getBySlugAndCurrentUser({ slug: params["slug"] })
                 : _notesService.getByTitleAndCurrentUser({ title: moment().format(constants.DATE_FORMAT) })
         })
-        .map(x => x.note)
-        .subscribe(note => this.note$.next(note || this.note$.value));
+            .map(x => x.note)
+            .subscribe(note => this.note$.next(note || this.note$.value));
     }
 
     private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
     public quillEditorFormControl: FormControl = new FormControl('');
-    
-    onSaveTagClick(e) {        
+
+    onSaveTagClick(e) {
         const correlationId = this._correlationIdsList.newId();
         this._tagsService.addOrUpdate({ tag: e.detail.tag, correlationId }).subscribe();
     }
 
-    ngOnInit() {        
+    ngOnInit() {
         if (constants.SUPPORTS_SPEECH_RECOGNITION)
             this._speechRecognitionService.start();
     }
@@ -68,62 +68,60 @@ export class LandingPageComponent {
         this._ngUnsubscribe.next();
 
         if (constants.SUPPORTS_SPEECH_RECOGNITION)
-            this._speechRecognitionService.stop();        
+            this._speechRecognitionService.stop();
     }
 
-    async ngAfterViewInit() {        
+    async ngAfterViewInit() {
         this._tagsService.get()
             .takeUntil(this._ngUnsubscribe)
             .subscribe(x => this.tags$.next(x.tags));
 
         this._speechRecognitionService.finalTranscript$
             .takeUntil(this._ngUnsubscribe)
-            .subscribe(x => {
-            if (x) {
-                this.quillEditorFormControl.patchValue(`${this.quillEditorFormControl.value}<p>${x}</p>`);
-                const correlationId = this._correlationIdsList.newId();
-                this._notesService.addOrUpdate({
+            .filter(x => x && x.length > 0)
+            .map(x => this.quillEditorFormControl.patchValue(`${this.quillEditorFormControl.value}<p>${x}</p>`))
+            .map(x => this._correlationIdsList.newId())
+            .flatMap(correlationId => this._notesService.addOrUpdate({
                     correlationId,
                     note: {
                         id: this.note$.value.id,
                         title: this.note$.value.title,
                         body: this.quillEditorFormControl.value
                     },
-                }).subscribe();
-            }
-        })                         
-        
+            }))
+            .subscribe();
+
         this._eventHub.events
             .takeUntil(this._ngUnsubscribe)
-            .subscribe(x => {                                    
-            if (!this._correlationIdsList.hasId(x.payload.correlationId)
-                && x.type == NOTE_ADDED_OR_UPDATED
-                && x.tenantUniqueId == this._storage.get({ name: constants.TENANT })
-                && this.note$.value.id == x.payload.entity.id)
-                this.note$.next(x.payload.entity);                                            
-        });
+            .subscribe(x => {
+                if (!this._correlationIdsList.hasId(x.payload.correlationId)
+                    && x.type == NOTE_ADDED_OR_UPDATED
+                    && x.tenantUniqueId == this._storage.get({ name: constants.TENANT })
+                    && this.note$.value.id == x.payload.entity.id)
+                    this.note$.next(x.payload.entity);
+            });
 
         this.note$
             .filter(x => x != null)
             .takeUntil(this._ngUnsubscribe)
-            .subscribe(x => {            
-            this.quillEditorFormControl.patchValue(x.body);
-            this.selectedTags$.next(x.tags);
-        });
-        
+            .subscribe(x => {
+                this.quillEditorFormControl.patchValue(x.body);
+                this.selectedTags$.next(x.tags);
+            });
+
         Observable
             .fromEvent(this._textEditor, "keyup")
             .takeUntil(this._ngUnsubscribe)
             .debounce(() => Observable.timer(300))
             .map(() => this._correlationIdsList.newId())
             .switchMap((correlationId) => this._notesService.addOrUpdate({
-                    correlationId,
-                    note: {
-                        id: this.note$.value.id,
-                        title: this.note$.value.title,
-                        body: this.quillEditorFormControl.value
-                    },
-                }))
+                correlationId,
+                note: {
+                    id: this.note$.value.id,
+                    title: this.note$.value.title,
+                    body: this.quillEditorFormControl.value
+                },
+            }))
             .subscribe();
     }
 
@@ -147,10 +145,10 @@ export class LandingPageComponent {
     }
 
     private get _textEditor() { return this._elementRef.nativeElement.querySelector("ce-quill-text-editor"); }
-    
+
     public tags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);
 
     public selectedTags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);
-    
-    public note$: BehaviorSubject<Note> = new BehaviorSubject(new Note());  
+
+    public note$: BehaviorSubject<Note> = new BehaviorSubject(new Note());
 }
