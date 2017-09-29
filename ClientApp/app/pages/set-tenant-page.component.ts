@@ -17,7 +17,7 @@ export class SetTenantPageComponent {
         private _tenantsService: TenantsService
     ) { }
     
-    tryToSubmit($event) {
+    public tryToSubmit($event) {
         this._storage.put({ name: constants.TENANT, value: $event.detail.tenant.id });
 
         this._tenantsService.set({ uniqueId: $event.detail.tenant.id })

@@ -4,6 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Router} from "@angular/router";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Observable} from "rxjs/Observable";
+import {Subject} from "rxjs/Subject";
 import {Subscription} from "rxjs/Subscription";
 import {constants} from "../shared/constants";
 import {Note} from "../shared/models/note.model";
@@ -18,6 +19,8 @@ import {addOrUpdate} from "../shared/utilities/add-or-update";
 import {pluckOut} from "../shared/utilities/pluck-out";
 
 declare var moment: any;
+
+const NOTE_ADDED_OR_UPDATED = "[Notes] NoteAddedOrUpdated"; 
 
 @Component({
     templateUrl: "./landing-page.component.html",
@@ -46,11 +49,11 @@ export class LandingPageComponent {
         .map(x => x.note)
         .subscribe(note => this.note$.next(note || this.note$.value));
     }
-    
+
+    private _ngUnsubscribe: Subject<void> = new Subject<void>();
+
     public quillEditorFormControl: FormControl = new FormControl('');
     
-    private _subscriptions: Array<Subscription> = [];
-
     onSaveTagClick(e) {        
         const correlationId = this._correlationIdsList.newId();
         this._tagsService.addOrUpdate({ tag: e.detail.tag, correlationId }).subscribe();
@@ -61,15 +64,21 @@ export class LandingPageComponent {
             this._speechRecognitionService.start();
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
+        this._ngUnsubscribe.next();
+
         if (constants.SUPPORTS_SPEECH_RECOGNITION)
             this._speechRecognitionService.stop();        
     }
 
     async ngAfterViewInit() {        
-        this._subscriptions.push(this._tagsService.get().subscribe(x => this.tags$.next(x.tags)));
+        this._tagsService.get()
+            .takeUntil(this._ngUnsubscribe)
+            .subscribe(x => this.tags$.next(x.tags));
 
-        this._subscriptions.push(this._speechRecognitionService.finalTranscript$.subscribe(x => {
+        this._speechRecognitionService.finalTranscript$
+            .takeUntil(this._ngUnsubscribe)
+            .subscribe(x => {
             if (x) {
                 this.quillEditorFormControl.patchValue(`${this.quillEditorFormControl.value}<p>${x}</p>`);
                 const correlationId = this._correlationIdsList.newId();
@@ -82,12 +91,13 @@ export class LandingPageComponent {
                     },
                 }).subscribe();
             }
-        }));
-
-
-        this._eventHub.events.subscribe(x => {                                    
+        })                         
+        
+        this._eventHub.events
+            .takeUntil(this._ngUnsubscribe)
+            .subscribe(x => {                                    
             if (!this._correlationIdsList.hasId(x.payload.correlationId)
-                && x.type == "[Notes] NoteAddedOrUpdated"
+                && x.type == NOTE_ADDED_OR_UPDATED
                 && x.tenantUniqueId == this._storage.get({ name: constants.TENANT })
                 && this.note$.value.id == x.payload.entity.id)
                 this.note$.next(x.payload.entity);                                            
@@ -95,13 +105,15 @@ export class LandingPageComponent {
 
         this.note$
             .filter(x => x != null)
+            .takeUntil(this._ngUnsubscribe)
             .subscribe(x => {            
             this.quillEditorFormControl.patchValue(x.body);
             this.selectedTags$.next(x.tags);
         });
         
         Observable
-            .fromEvent(this._elementRef.nativeElement.querySelector("ce-quill-text-editor"), "keyup")
+            .fromEvent(this._textEditor, "keyup")
+            .takeUntil(this._ngUnsubscribe)
             .debounce(() => Observable.timer(300))
             .map(() => this._correlationIdsList.newId())
             .switchMap((correlationId) => this._notesService.addOrUpdate({
@@ -134,8 +146,8 @@ export class LandingPageComponent {
         addOrUpdate({ items: this.note$.value.tags, item: tag });
     }
 
-    private _saveSubscription: Subscription;
-
+    private get _textEditor() { return this._elementRef.nativeElement.querySelector("ce-quill-text-editor"); }
+    
     public tags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);
 
     public selectedTags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);

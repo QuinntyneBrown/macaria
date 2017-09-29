@@ -1,12 +1,14 @@
 import {Component} from "@angular/core";
-import {TagsService} from "../shared/services/tags.service";
-import {Tag} from "../shared/models/tag.model";
-import {ModalService} from "../shared/services/modal.service";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {Observable} from "rxjs/Observable";
+import {Subject} from "rxjs/Subject";
 import {SAVE_TAG} from "../shared/components/tag-edit-modal.component";
+import {Tag} from "../shared/models/tag.model";
+import {EventHub} from "../shared/services/event-hub";
+import {TagsService} from "../shared/services/tags.service";
+import {ModalService} from "../shared/services/modal.service";
 import {CorrelationIdsList} from "../shared/services/correlation-ids-list";
 import {addOrUpdate} from "../shared/utilities/add-or-update";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {EventHub} from "../shared/services/event-hub";
 import {pluckOut} from "../shared/utilities/pluck-out";
 
 @Component({
@@ -23,13 +25,21 @@ export class TagManagementPageComponent {
         this.onSaveTagClick = this.onSaveTagClick.bind(this);        
     }
 
+    private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
     ngOnInit() {
-        this._tagsService.get().subscribe(x => this.tags$.next(x.tags));
-
-        document.body.addEventListener(SAVE_TAG, this.onSaveTagClick);
-
-        this._eventHub.events.subscribe(x => {
+        this._tagsService.get()
+            .takeUntil(this._ngUnsubscribe)
+            .subscribe(x => this.tags$.next(x.tags));
+        
+        Observable.fromEvent(document.body, SAVE_TAG)
+            .takeUntil(this._ngUnsubscribe)
+            .map(e => this.onSaveTagClick(e))
+            .subscribe();
+        
+        this._eventHub.events
+            .takeUntil(this._ngUnsubscribe)
+            .subscribe(x => {
             if (this._correlationIdsList.hasId(x.payload.correlationId) && x.payload.entity && x.type == "[Tags] TagAddedOrUpdated") {                
                 this.tags$.next(addOrUpdate({
                     items: this.tags$.value,
@@ -60,7 +70,7 @@ export class TagManagementPageComponent {
     }
 
     ngOnDestroy() {
-        document.body.removeEventListener(SAVE_TAG, this.onSaveTagClick)
+        this._ngUnsubscribe.next();
     }
 
     onSaveTagClick(e) {
