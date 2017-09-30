@@ -1,8 +1,8 @@
 import { Component, ElementRef } from "@angular/core";
-import { LoginRedirectService } from "./shared/services/login-redirect.service";
+import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { NAVIGATE_BY_URL } from "./shared/components/menu.component";
-import { Router } from "@angular/router";
+import { LoginRedirectService } from "./shared/services/login-redirect.service";
 import { PopoverService } from "./shared/services/popover.service";
 
 @Component({
@@ -11,10 +11,11 @@ import { PopoverService } from "./shared/services/popover.service";
     selector: "app"
 })
 export class AppComponent {
-    constructor(private _elementRef: ElementRef,
+    constructor(
+        private _elementRef: ElementRef,
         private _loginRedirectService: LoginRedirectService,
-        private _router: Router,
-        private _popoverService: PopoverService
+        private _popoverService: PopoverService,
+        private _router: Router        
     ) {
         this.onNavigateByUrl = this.onNavigateByUrl.bind(this);
     }
@@ -24,8 +25,8 @@ export class AppComponent {
     private get _logoutOnDoubleClick$(): Observable<any> {
         return this._click$
             .buffer(this._click$.debounce(x => Observable.timer(300)))
-            .map(list => list.length)
-            .filter(x => x >= 2)
+            .map(clickEvents => clickEvents.length)
+            .filter(x => x === 2)
             .do(x => this._loginRedirectService.redirectToLogin())
     }
 

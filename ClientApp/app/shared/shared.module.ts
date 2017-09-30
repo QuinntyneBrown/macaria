@@ -46,47 +46,6 @@ import "./components/tag-edit-modal.component";
 import "./components/tag-edit.component";
 import "./components/backdrop.component";
 
-const providers = [
-    EventHub,
-    AuthGuardService,
-    AuthenticationService,
-    CorrelationIdsList,
-    ErrorService,
-    LoginRedirectService,
-    TenantGuardService,
-    EventHubConnectionGuardService,
-    CurrentUserGuardService,
-    Storage,
-    PopoverService,
-    Space,
-    Ruler,
-    Position,
-    {
-        provide: ModalService,
-        useFactory: (): ModalService => ModalService.instance,
-        deps: []
-    },
-    UsersService,
-    NotesService,
-    TagsService,
-    TenantsService,
-    SpeechRecognitionService,
-    {
-        provide: HTTP_INTERCEPTORS,
-        useClass: JwtInterceptor,
-        multi: true
-    },
-    {
-        provide: HTTP_INTERCEPTORS,
-        useClass: AuthInterceptor,
-        multi: true
-    },
-    {
-        provide: HTTP_INTERCEPTORS,
-        useClass: TenantInterceptor,
-        multi: true
-    }
-];
 
 
 const declarables = [
@@ -107,6 +66,42 @@ const declarables = [
     imports: [CommonModule, RouterModule, HttpClientModule, FormsModule, ReactiveFormsModule],
     declarations: [declarables],
     exports:[declarables],
-    providers: providers
+    providers: [
+        EventHub,
+        AuthGuardService,
+        AuthenticationService,
+        CorrelationIdsList,
+        ErrorService,
+        LoginRedirectService,
+        TenantGuardService,
+        EventHubConnectionGuardService,
+        CurrentUserGuardService,
+        Storage,
+        PopoverService,
+        Space,
+        Ruler,
+        Position,
+        ModalService,
+        UsersService,
+        NotesService,
+        TagsService,
+        TenantsService,
+        SpeechRecognitionService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: JwtInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: TenantInterceptor,
+            multi: true
+        }
+    ]
 })
 export class SharedModule {}
