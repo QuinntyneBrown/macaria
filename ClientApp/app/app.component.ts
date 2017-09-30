@@ -18,17 +18,19 @@ export class AppComponent {
     ) {
         this.onNavigateByUrl = this.onNavigateByUrl.bind(this);
     }
-    
-    ngOnInit() {
 
-        Observable.fromEvent(this.nativeElement, "click")
-            .do(x => this._clickCount++)
-            .debounce(x => Observable.timer(300))
-            .map(x => this._clickCount)
-            .do(() => this._clickCount = 0)            
+    private get _click$(): Observable<any> { return Observable.fromEvent(this.nativeElement, "click"); }
+
+    private get _logoutOnDoubleClick$(): Observable<any> {
+        return this._click$
+            .buffer(this._click$.debounce(x => Observable.timer(300)))
+            .map(list => list.length)
             .filter(x => x >= 2)
             .do(x => this._loginRedirectService.redirectToLogin())
-            .subscribe();
+    }
+
+    ngOnInit() {
+        this._logoutOnDoubleClick$.subscribe();
         
         document.body.addEventListener(NAVIGATE_BY_URL, this.onNavigateByUrl);
     }
@@ -37,8 +39,6 @@ export class AppComponent {
         this._popoverService.hide();
         this._router.navigateByUrl(e.detail.url);
     }
-    
-    private _clickCount:number = 0;
     
     public get nativeElement(): HTMLElement { return this._elementRef.nativeElement as HTMLElement; }
 }
