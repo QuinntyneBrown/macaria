@@ -83,7 +83,7 @@ export class LandingPageComponent {
             .filter(x => x && x.length > 0)
             .map(x => this.quillEditorFormControl.patchValue(`${this.quillEditorFormControl.value}<p>${x}</p>`))
             .map(x => this._correlationIdsList.newId())
-            .flatMap(correlationId => this._notesService.addOrUpdate({
+            .switchMap(correlationId => this._notesService.addOrUpdate({
                     correlationId,
                     note: {
                         id: this.note$.value.id,
@@ -95,21 +95,17 @@ export class LandingPageComponent {
 
         this._eventHub.events
             .takeUntil(this._ngUnsubscribe)
-            .subscribe(x => {
-                if (!this._correlationIdsList.hasId(x.payload.correlationId)
-                    && x.type == NOTE_ADDED_OR_UPDATED
-                    && x.tenantUniqueId == this._storage.get({ name: constants.TENANT })
-                    && this.note$.value.id == x.payload.entity.id)
-                    this.note$.next(x.payload.entity);
-            });
+            .filter((x) => !this._correlationIdsList.hasId(x.payload.correlationId))
+            .filter((x) => x.type == NOTE_ADDED_OR_UPDATED)
+            .filter((x) => x.tenantUniqueId == this._storage.get({ name: constants.TENANT }))
+            .filter((x) => this.note$.value.id == x.payload.entity.id)
+            .subscribe(x => this.note$.next(x.payload.entity));
 
         this.note$
             .filter(x => x != null)
             .takeUntil(this._ngUnsubscribe)
-            .subscribe(x => {
-                this.quillEditorFormControl.patchValue(x.body);
-                this.selectedTags$.next(x.tags);
-            });
+            .do(x => this.quillEditorFormControl.patchValue(x.body))
+            .subscribe(x => this.selectedTags$.next(x.tags));
 
         Observable
             .fromEvent(this._textEditor, "keyup")
