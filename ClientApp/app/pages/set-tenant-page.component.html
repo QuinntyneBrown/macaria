@@ -1,2 +1,6 @@
 <h1>Set Tenant</h1>
 <ce-set-tenant-form (tryToSubmit)="tryToSubmit($event)"></ce-set-tenant-form>
+
+<ul>
+    <li *ngFor="let tenant of tenants"><a (click)="tenantClicked(tenant)"> {{ tenant }}</a></li>
+</ul>
