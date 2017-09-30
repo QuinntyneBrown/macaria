@@ -31,13 +31,13 @@ export class LandingPageComponent {
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _correlationIdsList: CorrelationIdsList,
-        private _notesService: NotesService,
         private _elementRef: ElementRef,
         private _eventHub: EventHub,
+        private _notesService: NotesService,        
         private _router: Router,
+        private _speechRecognitionService: SpeechRecognitionService,
         private _storage: Storage,
-        private _tagsService: TagsService,
-        private _speechRecognitionService: SpeechRecognitionService
+        private _tagsService: TagsService
     ) {
         this.onSaveTagClick = this.onSaveTagClick.bind(this);
 

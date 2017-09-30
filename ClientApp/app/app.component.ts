@@ -16,12 +16,20 @@ export class AppComponent {
         private _router: Router,
         private _popoverService: PopoverService
     ) {
-        this._onClick = this._onClick.bind(this);
         this.onNavigateByUrl = this.onNavigateByUrl.bind(this);
     }
-
+    
     ngOnInit() {
-        this.nativeElement.addEventListener("click", this._onClick);
+
+        Observable.fromEvent(this.nativeElement, "click")
+            .do(x => this._clickCount++)
+            .debounce(x => Observable.timer(300))
+            .map(x => this._clickCount)
+            .do(() => this._clickCount = 0)            
+            .filter(x => x >= 2)
+            .do(x => this._loginRedirectService.redirectToLogin())
+            .subscribe();
+        
         document.body.addEventListener(NAVIGATE_BY_URL, this.onNavigateByUrl);
     }
 
@@ -29,23 +37,8 @@ export class AppComponent {
         this._popoverService.hide();
         this._router.navigateByUrl(e.detail.url);
     }
-
-    private _timeoutId: number;
-
+    
     private _clickCount:number = 0;
-    private _onClick() {
-        if (this._timeoutId) clearTimeout(this._timeoutId);
-
-        this._clickCount++;
-
-        if (this._clickCount == 2) {
-            this._loginRedirectService.redirectToLogin();
-            clearTimeout(this._timeoutId);
-            return;
-        }
-
-        this._timeoutId = (setTimeout(() => this._clickCount = 0, 250) as any); 
-    }
-
+    
     public get nativeElement(): HTMLElement { return this._elementRef.nativeElement as HTMLElement; }
 }
