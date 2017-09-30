@@ -1,5 +1,5 @@
 import { SAVE_TAG_CLICK } from "./tag-edit.component";
-import { ModalService } from "../services/modal.service";
+import { MODAL_CLOSE } from "../services/modal.service";
 import { customEvents } from "../services/custom-events";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Tag } from "../models/tag.model";
@@ -9,11 +9,10 @@ const html = require("./tag-edit-modal.component.html");
 const css = require("./tag-edit-modal.component.css");
 const modalCss = require("../../../styles/modal-window.css");
 
-
 export const SAVE_TAG = "[Tags] Save Tag";
 
 export class TagEditModalComponent extends HTMLElement {
-    constructor(private _modalService: ModalService = ModalService.instance) {
+    constructor() {
         super();
         this.onTagSaveClick = this.onTagSaveClick.bind(this);
     }
@@ -48,14 +47,9 @@ export class TagEditModalComponent extends HTMLElement {
 
     public onTagSaveClick(e) {        
         this.dispatchEvent(customEvents.create({ name: SAVE_TAG, detail: e.detail }));
-        this._modalService.close();
-        
+        this.dispatchEvent(customEvents.create({ name: MODAL_CLOSE }));
     }
-
-    disconnectedCallback() {
-
-    }
-
+    
     public get tagEditElement(): HTMLElement {
         return this.shadowRoot.querySelector("ce-tag-edit") as HTMLElement;
     }
