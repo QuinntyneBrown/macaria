@@ -43,11 +43,10 @@ export class LandingPageComponent {
 
         _activatedRoute.params
             .takeUntil(this._ngUnsubscribe)
-            .flatMap(params => {
-            return params["slug"] != null
+            .switchMap(params => params["slug"] != null
                 ? _notesService.getBySlugAndCurrentUser({ slug: params["slug"] })
                 : _notesService.getByTitleAndCurrentUser({ title: moment().format(constants.DATE_FORMAT) })
-            })
+            )
             .map(x => x.note)
             .subscribe(note => this.note$.next(note || this.note$.value));
     }
