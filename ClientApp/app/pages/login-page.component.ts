@@ -16,7 +16,6 @@ export class LoginPageComponent implements OnInit {
     ) { }
 
     public ngOnInit() {
-
         this._logger.trace(`LoginPageComponent: ngOnIt`);
 
         this._storage.put({ name: constants.ACCESS_TOKEN_KEY, value: null });
@@ -37,7 +36,6 @@ export class LoginPageComponent implements OnInit {
     public rememberMe: boolean = false;
 
     public async tryToLogin($event: { value: { username: string, password: string, rememberMe: boolean } }) {
-
         this._logger.trace(`LoginPageComponent: tryToLogin  ${JSON.stringify($event)}`);
 
         this._storage.put({ name: constants.LOGIN_CREDENTIALS, value: $event.value.rememberMe ? $event.value : null });

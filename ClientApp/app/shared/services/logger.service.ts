@@ -23,4 +23,6 @@ export class Logger implements ILogger {
     }
 
     public trace(message: string) { this.log(LogLevel.Trace, message); }
+
+    public error(message: string) { this.log(LogLevel.Error, message); }
 }

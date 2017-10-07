@@ -17,6 +17,7 @@ import { Storage } from "../shared/services/storage.service";
 import { TagsService } from "../shared/services/tags.service";
 import { addOrUpdate } from "../shared/utilities/add-or-update";
 import { pluckOut } from "../shared/utilities/pluck-out";
+import { Logger } from "../shared/services/logger.service";
 
 declare var moment: any;
 
@@ -33,6 +34,7 @@ export class LandingPageComponent {
         private _correlationIdsList: CorrelationIdsList,
         private _elementRef: ElementRef,
         private _eventHub: EventHub,
+        private _logger: Logger,
         private _notesService: NotesService,        
         private _router: Router,
         private _speechRecognitionService: SpeechRecognitionService,
@@ -55,17 +57,23 @@ export class LandingPageComponent {
 
     public quillEditorFormControl: FormControl = new FormControl('');
 
-    onSaveTagClick(e) {
+    onSaveTagClick($event) {
+        this._logger.trace(`(LandingPage) onSaveTagClick: ${JSON.stringify($event)}`);
+
         const correlationId = this._correlationIdsList.newId();
-        this._tagsService.addOrUpdate({ tag: e.detail.tag, correlationId }).subscribe();
+        this._tagsService.addOrUpdate({ tag: $event.detail.tag, correlationId }).subscribe();
     }
 
     ngOnInit() {
+        this._logger.trace("LandingPage: ngOnInit");
+
         if (constants.SUPPORTS_SPEECH_RECOGNITION)
             this._speechRecognitionService.start();
     }
 
     ngOnDestroy(): void {
+        this._logger.trace("(LandingPage) ngOnDestroy");
+
         this._ngUnsubscribe.next();
 
         if (constants.SUPPORTS_SPEECH_RECOGNITION)
@@ -73,6 +81,8 @@ export class LandingPageComponent {
     }
 
     async ngAfterViewInit() {
+        this._logger.trace("(LandingPage) ngAfterViewInit");
+
         this._tagsService.get()
             .takeUntil(this._ngUnsubscribe)
             .subscribe(x => this.tags$.next(x.tags));
@@ -123,6 +133,8 @@ export class LandingPageComponent {
     }
 
     public handleTagClicked($event) {
+        this._logger.trace(`(LandingPage) handleTagClicked: ${JSON.stringify($event)}`);
+
         const tag = <Tag>$event.tag;
         const correlationId = this._correlationIdsList.newId();
 

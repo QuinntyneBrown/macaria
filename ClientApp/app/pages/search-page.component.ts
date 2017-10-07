@@ -7,6 +7,7 @@ import {Note} from "../shared/models/note.model";
 import {Tag} from "../shared/models/tag.model";
 import {NotesService} from "../shared/services/notes.service";
 import {TagsService} from "../shared/services/tags.service";
+import {Logger} from "../shared/services/logger.service";
 
 @Component({
     templateUrl: "./search-page.component.html",
@@ -18,6 +19,7 @@ export class SearchPageComponent {
         private _notesService: NotesService,
         private _router: Router,
         private _elementRef: ElementRef,
+        private _logger: Logger,
         private _tagsService: TagsService
     ) {
         this.onNoteTileClicked = this.onNoteTileClicked.bind(this);
@@ -28,6 +30,8 @@ export class SearchPageComponent {
     public tags: Array<Tag> = [];
 
     ngOnInit() {
+        this._logger.trace(`(SearchPage) ngOnInit`);
+
         this._notesService.getByCurrentUser().takeUntil(this._ngUnsubscribe).subscribe(x => this.notes = x.notes);
         this._tagsService.get().takeUntil(this._ngUnsubscribe).subscribe(x => this.tags = x.tags);
         this._elementRef.nativeElement.addEventListener(NOTE_TILE_CLICKED, this.onNoteTileClicked);
@@ -38,11 +42,15 @@ export class SearchPageComponent {
             .subscribe();
     }
 
-    public onNoteTileClicked(e: any) {
-        this._router.navigate([e.detail.note.slug]);
+    public onNoteTileClicked($event: any) {
+        this._logger.trace(`(SearchPage) onNoteTileClicked: ${JSON.stringify($event)}`);
+
+        this._router.navigate([$event.detail.note.slug]);
     }
 
     ngOnDestroy() {
+        this._logger.trace(`(SearchPage) ngOnDestroy`);
+
         this._ngUnsubscribe.next();
     }
 
