@@ -1,4 +1,5 @@
-import {NgModule} from '@angular/core';
+import { constants } from "./constants";
+import { NgModule } from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
 import {HttpClientModule,HTTP_INTERCEPTORS} from "@angular/common/http";
@@ -69,7 +70,7 @@ const declarables = [
     declarations: [declarables],
     exports:[declarables],
     providers: [
-        { provide: "MINIMUM_LOG_LEVEL", useValue: LogLevel.Trace },
+        { provide: constants.MINIMUM_LOG_LEVEL, useValue: LogLevel.Trace },
         
         EventHub,
         AuthGuardService,
