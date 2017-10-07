@@ -10,6 +10,7 @@ import { LoginRedirectService } from "./services/login-redirect.service";
 import { EventHub } from "./services/event-hub";
 import { Storage } from "./services/storage.service";
 import { ErrorService } from "./services/error.service";
+import { Logger } from "./services/logger.service";
 import { PopoverService } from "./services/popover.service";
 import { Ruler } from "./services/ruler";
 import { Position } from "./services/position";
@@ -46,6 +47,7 @@ import "./components/tag-edit-modal.component";
 import "./components/tag-edit.component";
 import "./components/backdrop.component";
 
+import { LogLevel } from "./services/logger.service";
 
 
 const declarables = [
@@ -67,8 +69,11 @@ const declarables = [
     declarations: [declarables],
     exports:[declarables],
     providers: [
+        { provide: "MINIMUM_LOG_LEVEL", useValue: LogLevel.Trace },
+        
         EventHub,
         AuthGuardService,
+        Logger,
         AuthenticationService,
         CorrelationIdsList,
         ErrorService,

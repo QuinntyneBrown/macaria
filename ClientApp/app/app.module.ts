@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { LogLevel } from "./shared/services/logger.service";
 
 import { PagesModule } from "./pages/pages.module";
 import { SharedModule } from "./shared/shared.module";
@@ -18,6 +18,10 @@ import {
 
 const declarables = [
     AppComponent
+];
+
+const providers = [
+    { provide: "MINIMUM_LOG_LEVEL", useValue: LogLevel.Trace }
 ];
 
 @NgModule({
@@ -33,6 +37,7 @@ const declarables = [
         RoutingModule,
         SharedModule,
     ],
+    providers,
     declarations: [declarables],
     exports: [declarables],
     bootstrap: [AppComponent]

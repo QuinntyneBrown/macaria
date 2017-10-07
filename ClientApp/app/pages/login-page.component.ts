@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthenticationService, LoginRedirectService, constants, Storage } from "../shared";
+import { Logger, LogLevel } from "../shared/services/logger.service";
 
 @Component({
     templateUrl: "./login-page.component.html",
@@ -9,11 +10,14 @@ import { AuthenticationService, LoginRedirectService, constants, Storage } from 
 export class LoginPageComponent implements OnInit {
     constructor(
         private _authenticationService: AuthenticationService,
+        private _logger: Logger,
         private _loginRedirectService: LoginRedirectService,
         private _storage: Storage
     ) { }
 
     public ngOnInit() {
+
+        this._logger.log(LogLevel.Trace, `LoginPageComponent: ngOnIt`);
 
         this._storage.put({ name: constants.ACCESS_TOKEN_KEY, value: null });
 
@@ -33,6 +37,8 @@ export class LoginPageComponent implements OnInit {
     public rememberMe: boolean = false;
 
     public async tryToLogin($event: { value: { username: string, password: string, rememberMe: boolean } }) {
+
+        this._logger.log(LogLevel.Trace, `LoginPageComponent: tryToLogin  ${JSON.stringify($event)}`);
 
         this._storage.put({ name: constants.LOGIN_CREDENTIALS, value: $event.value.rememberMe ? $event.value : null });
 

@@ -263,14 +263,13 @@
     <TypeScriptCompile Include="ClientApp\app\shared\interceptors\tenant.interceptor.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\models\tag.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\authentication.service.ts" />
-    <TypeScriptCompile Include="ClientApp\app\shared\services\content-ref.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\correlation-ids-list.ts" />
-    <TypeScriptCompile Include="ClientApp\app\shared\services\custom-elements-modal.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\custom-events.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\error.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\event-hub.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\fetch-client.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\index.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\services\logger.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\login-redirect.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\modal.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\services\popover.service.ts" />
