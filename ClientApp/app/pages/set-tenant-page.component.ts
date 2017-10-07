@@ -43,8 +43,11 @@ export class SetTenantPageComponent {
 
         this._tenantsService.set({ uniqueId: $event.detail.tenant.id })
             .catch((e) => {
+
                 this._storage.put({ name: constants.TENANT, value: null });
+
                 this._logger.error(`(SetTenantPage): tryToSubmit Failed ${JSON.stringify(e)}`);
+
                 throw new Error(e);
             })
             .subscribe(() => this._loginRedirectService.redirectPreLogin());

@@ -10,6 +10,7 @@ import {ModalService} from "../shared/services/modal.service";
 import {CorrelationIdsList} from "../shared/services/correlation-ids-list";
 import {addOrUpdate} from "../shared/utilities/add-or-update";
 import {pluckOut} from "../shared/utilities/pluck-out";
+import { Logger } from "../shared/services/logger.service";
 
 @Component({
     templateUrl: "./tag-management-page.component.html",
@@ -20,6 +21,7 @@ export class TagManagementPageComponent {
     constructor(
         private _correlationIdsList: CorrelationIdsList,
         private _eventHub: EventHub,
+        private _logger: Logger,
         private _modalService: ModalService,
         private _tagsService: TagsService) {
         this.onSaveTagClick = this.onSaveTagClick.bind(this);        
@@ -28,6 +30,8 @@ export class TagManagementPageComponent {
     private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
     ngOnInit() {
+        this._logger.trace(`(TagManagementPage)`);
+
         this._tagsService.get()
             .takeUntil(this._ngUnsubscribe)
             .subscribe(x => this.tags$.next(x.tags));
@@ -50,12 +54,16 @@ export class TagManagementPageComponent {
     }
 
     onEdit($event) {
+        this._logger.trace(`(TagManagementPage) onEdit ${JSON.stringify($event)}`);
+
         this._modalService.open({
             html: `<ce-tag-edit-modal tag='${JSON.stringify($event.detail.tag)}'></ce-tag-edit-modal>`
         });
     }
 
     onDelete($event) {
+        this._logger.trace(`(TagManagementPage) onDelete ${JSON.stringify($event)}`);
+
         const correlationId = this._correlationIdsList.newId();
 
         this._tagsService.remove({
@@ -70,15 +78,21 @@ export class TagManagementPageComponent {
     }
 
     ngOnDestroy() {
+        this._logger.trace(`(TagManagementPage) ngOnDestroy`);
+
         this._ngUnsubscribe.next();
     }
 
-    onSaveTagClick(e) {
+    onSaveTagClick($event) {
+        this._logger.trace(`(TagManagementPage) onSaveTagClick ${JSON.stringify($event)}`);
+
         const correlationId = this._correlationIdsList.newId();
-        this._tagsService.addOrUpdate({ tag: e.detail.tag, correlationId }).subscribe();
+        this._tagsService.addOrUpdate({ tag: $event.detail.tag, correlationId }).subscribe();
     }
 
     public openEditTagModal() {        
+        this._logger.trace(`(TagManagementPage) openEditTagModal`);
+        
         this._modalService.open({
             html: "<ce-tag-edit-modal></ce-tag-edit-modal>"
         });
