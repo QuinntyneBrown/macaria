@@ -3,6 +3,8 @@ import { constants } from "../constants";
 
 export interface ILogger {
     log(logLevel: LogLevel, message: string): void;
+    warn(message: string): void;
+    trace(message: string): void;
 }
 
 export enum LogLevel {
@@ -16,6 +18,13 @@ export enum LogLevel {
 @Injectable()
 export class Logger implements ILogger {
     constructor( @Inject(constants.MINIMUM_LOG_LEVEL) private _minimumLogLevel: LogLevel) { }
+
+    private static _instance: ILogger;
+
+    public static get instance(): ILogger {
+        this._instance = this._instance || new Logger(LogLevel.Trace);
+        return this._instance;
+    }
 
     public log(logLevel: LogLevel, message: string) {
         if (logLevel >= this._minimumLogLevel)

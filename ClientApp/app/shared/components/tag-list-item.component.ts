@@ -1,4 +1,5 @@
 import {Component,Input,Output,EventEmitter} from "@angular/core";
+import { Logger } from "../services/logger.service";
 
 @Component({
     templateUrl: "./tag-list-item.component.html",

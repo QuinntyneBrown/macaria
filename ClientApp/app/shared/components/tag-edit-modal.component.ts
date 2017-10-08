@@ -3,6 +3,7 @@ import { MODAL_CLOSE } from "../services/modal.service";
 import { customEvents } from "../services/custom-events";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Tag } from "../models/tag.model";
+import { Logger } from "../services/logger.service";
 
 const template = document.createElement("template");
 const html = require("./tag-edit-modal.component.html");

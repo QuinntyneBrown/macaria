@@ -1,6 +1,7 @@
 import { Component, Input, ElementRef } from "@angular/core";
 import { Note } from "../models/note.model";
 import { customEvents } from "../services/custom-events";
+import { Logger } from "../services/logger.service";
 
 export const NOTE_TILE_CLICKED = "NOTE TILE CLICKED";
 

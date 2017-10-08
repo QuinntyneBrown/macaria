@@ -1,5 +1,6 @@
 import { Component, ElementRef, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Logger } from "../services/logger.service";
 
 declare var Quill: any;
 

@@ -4,6 +4,7 @@ import { customEvents } from "../services/custom-events";
 const template = require("./tag-edit.component.html");
 const css = require("./tag-edit.component.css");
 const formsCss = require("../../../styles/forms.css");
+import { Logger, ILogger } from "../services/logger.service";
 
 export const SAVE_TAG_CLICK = "[Tags] SAVE TAG";
 

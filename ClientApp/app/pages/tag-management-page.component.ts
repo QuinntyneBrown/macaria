@@ -30,7 +30,7 @@ export class TagManagementPageComponent {
     private _ngUnsubscribe: Subject<void> = new Subject<void>();
 
     ngOnInit() {
-        this._logger.trace(`(TagManagementPage)`);
+        this._logger.trace(`(TagManagementPage) ngOnInit`);
 
         this._tagsService.get()
             .takeUntil(this._ngUnsubscribe)

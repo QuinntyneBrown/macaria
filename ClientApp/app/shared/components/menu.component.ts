@@ -1,4 +1,5 @@
 import { customEvents } from "../services/custom-events";
+import { Logger, ILogger } from "../services/logger.service";
 
 const template = document.createElement("template");
 const html = require("./menu.component.html");
@@ -8,13 +9,14 @@ export const MENU_ITEM_CLICKED = "MENU_ITEM_CLICKED";
 export const NAVIGATE_BY_URL = "NAVIGATE_BY_URL";
 
 export class MenuComponent extends HTMLElement {
-    constructor() {
+    constructor(private _logger: ILogger = Logger.instance) {
         super();
 
         this._onMenuItemClick = this._onMenuItemClick.bind(this);
     }
 
     async connectedCallback() {
+        this._logger.trace(`(Menu) connectedCallback`);
 
         template.innerHTML = `<style>${css}</style>${html}`; 
 

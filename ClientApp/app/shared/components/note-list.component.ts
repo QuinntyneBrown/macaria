@@ -4,6 +4,7 @@ import { Tag } from "../models/tag.model";
 import { FormControl } from "@angular/forms";
 import { addOrUpdate } from "../utilities/add-or-update";
 import { pluckOut } from "../utilities/pluck-out";
+import { Logger } from "../services/logger.service";
 
 @Component({
     templateUrl: "./note-list.component.html",
