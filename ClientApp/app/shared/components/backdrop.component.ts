@@ -9,7 +9,7 @@ export class BackdropComponent extends HTMLElement {
     }
     
     connectedCallback() {
-        this._logger.warn(`(Backdrop) connectedCallback`);
+        this._logger.trace(`(Backdrop) connectedCallback`);
 
         template.innerHTML = `<style>${css}</style>${html}`;
 

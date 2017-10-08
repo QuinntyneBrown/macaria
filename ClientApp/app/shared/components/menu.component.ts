@@ -30,20 +30,26 @@ export class MenuComponent extends HTMLElement {
     }
 
     private _setEventListeners() {        
+        this._logger.trace(`(Menu) _setEventListeners`);
+
         for (let i = 0; i < this.menuItemElements.length; i++) {
             this.menuItemElements[i].addEventListener("click", this._onMenuItemClick);
         }
     }
 
-    private _onMenuItemClick(e: Event) {
-        e.stopPropagation();
-        e.preventDefault();
+    private _onMenuItemClick($event: Event) {
+        this._logger.trace(`(Menu) _setEventListeners ${JSON.stringify($event)}`);
+
+        $event.stopPropagation();
+        $event.preventDefault();
         this.dispatchEvent(customEvents.create({
-            name: NAVIGATE_BY_URL, detail: { url: (e.target as HTMLElement).getAttribute("[routerLink]") }
+            name: NAVIGATE_BY_URL, detail: { url: ($event.target as HTMLElement).getAttribute("[routerLink]") }
         }));        
     }
 
     disconnectedCallback() {
+        this._logger.trace(`(Menu) disconnectedCallback`);
+
         for (let i = 0; i < this.menuItemElements.length; i++) {
             this.menuItemElements[i].removeEventListener("click", this._onMenuItemClick);
         }

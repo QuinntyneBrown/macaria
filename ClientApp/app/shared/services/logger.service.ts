@@ -3,7 +3,7 @@ import { constants } from "../constants";
 
 export interface ILogger {
     log(logLevel: LogLevel, message: string): void;
-    warn(message: string): void;
+    error(message: string): void;
     trace(message: string): void;
 }
 
@@ -19,9 +19,9 @@ export enum LogLevel {
 export class Logger implements ILogger {
     constructor( @Inject(constants.MINIMUM_LOG_LEVEL) private _minimumLogLevel: LogLevel) { }
 
-    private static _instance: ILogger;
+    private static _instance: Logger;
 
-    public static get instance(): ILogger {
+    public static get instance(): Logger {
         this._instance = this._instance || new Logger(LogLevel.Trace);
         return this._instance;
     }

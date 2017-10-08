@@ -6,7 +6,7 @@ export class CorrelationIdsList {
     private _guids: Array<string> = [];
 
     public newId() {
-        var newGuid = guid();
+        const newGuid = guid();
         this._guids.push(newGuid);
         return newGuid;
     }

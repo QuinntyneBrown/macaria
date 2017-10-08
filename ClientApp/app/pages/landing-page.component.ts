@@ -65,7 +65,7 @@ export class LandingPageComponent {
     }
 
     ngOnInit() {
-        this._logger.trace("LandingPage: ngOnInit");
+        this._logger.trace("(LandingPage) ngOnInit");
 
         if (constants.SUPPORTS_SPEECH_RECOGNITION)
             this._speechRecognitionService.start();
