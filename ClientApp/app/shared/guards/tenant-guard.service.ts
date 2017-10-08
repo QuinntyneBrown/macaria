@@ -12,10 +12,12 @@ import { Storage } from "../services/storage.service";
 import { LoginRedirectService } from "../services/login-redirect.service";
 import { Observable } from "rxjs";
 import { constants } from "../constants";
+import { Logger } from "../services/logger.service";
 
 @Injectable()
 export class TenantGuardService implements CanActivate {
     constructor(
+        private _logger: Logger,
         private _loginRedirectService: LoginRedirectService,
         private _storage: Storage        
     ) { }
@@ -24,6 +26,8 @@ export class TenantGuardService implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<boolean> {
+        this._logger.trace(`(TenantGuardGuard) canActivate`);
+
         const tenant = this._storage.get({ name: constants.TENANT });
 
         if (tenant)

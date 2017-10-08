@@ -3,15 +3,19 @@ import { CanLoad } from '@angular/router';
 import { Storage } from "../services/storage.service";
 import { constants } from "../constants";
 import { EventHub } from "../services/event-hub";
+import { Logger } from "../services/logger.service";
 
 @Injectable()
 export class EventHubConnectionGuardService  {
     constructor(
         private _eventHub: EventHub,
+        private _logger: Logger,
         private _storage: Storage
     ) { }
 
-    public canActivate(): Promise<boolean> {        
+    public canActivate(): Promise<boolean> {       
+        this._logger.trace(`(EventHubConnectionGuard) canActivate`);
+
         return new Promise(resolve =>
             this._eventHub.connect().then(() => {
                 resolve(true);

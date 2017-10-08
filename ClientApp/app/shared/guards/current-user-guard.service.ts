@@ -12,10 +12,12 @@ import { Storage } from "../services/storage.service";
 import { Observable } from "rxjs";
 import { constants } from "../constants";
 import { UsersService } from "../services/users.service";
+import { Logger } from "../services/logger.service";
 
 @Injectable()
 export class CurrentUserGuardService implements CanActivate {
     constructor(
+        private _logger: Logger,
         private _usersService: UsersService,
         private _storage: Storage
     ) { }
@@ -24,6 +26,7 @@ export class CurrentUserGuardService implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<boolean> {
+        this._logger.trace(`(CurrentUserGuard) canActivate`);
 
         var currentUser = this._storage.get({ name: constants.CURRENT_USER_KEY });
 

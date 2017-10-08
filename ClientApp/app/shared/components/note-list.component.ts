@@ -15,6 +15,10 @@ import { Logger } from "../services/logger.service";
     selector: "ce-note-list"
 })
 export class NoteListComponent {
+    constructor(private _logger: Logger) {
+        
+    }
+
     private _notes: Array<Note> = [];
 
     @Input("tags")
@@ -22,16 +26,18 @@ export class NoteListComponent {
 
     public selectedTags: Array<Tag> = [];
 
-    onTagClick(e) {
-        if (this.selectedTags.indexOf(e.tag) > -1) {
+    onTagClick($event) {
+        this._logger.trace(`(NoteList) onTagClick ${JSON.stringify($event)}`);
+
+        if (this.selectedTags.indexOf($event.tag) > -1) {
             pluckOut({
                 items: this.selectedTags,
-                value: e.tag.id
+                value: $event.tag.id
             });
         } else {
             addOrUpdate({
                 items: this.selectedTags,
-                item: e.tag
+                item: $event.tag
             });
         }        
     }
