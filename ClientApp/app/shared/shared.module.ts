@@ -30,6 +30,7 @@ import { CurrentUserGuardService } from "./guards/current-user-guard.service";
 
 import { JwtInterceptor } from "./interceptors/jwt.interceptor";
 import { AuthInterceptor } from "./interceptors/auth.interceptor";
+import { HttpLogInterceptor } from "./interceptors/http-log.interceptor";
 import { TenantInterceptor } from "./interceptors/tenant.interceptor";
 
 import { HeaderComponent } from "./components/header.component";
@@ -106,6 +107,11 @@ const declarables = [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: TenantInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpLogInterceptor,
             multi: true
         }
     ]

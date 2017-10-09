@@ -258,6 +258,7 @@
       <DependentUpon>header.component.html</DependentUpon>
     </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\app\shared\interceptors\auth.interceptor.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\interceptors\http-log.interceptor.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\interceptors\index.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\interceptors\jwt.interceptor.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\interceptors\tenant.interceptor.ts" />
