@@ -21,7 +21,7 @@ export class Ruler implements IRuler {
             } else {                
                 setTimeout(() => {
                     const containerElement = document.querySelector('body');
-                    var el = createElement(element.outerHTML);
+                    var el = createElement({ html: element.outerHTML });
                     el.setAttribute("dummy", "dummy");
                     containerElement.appendChild(el);
                     const clientRect = element.getBoundingClientRect();
