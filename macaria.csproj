@@ -206,6 +206,8 @@
     <TypeScriptCompile Include="ClientApp\app\pages\tag-management-page.component.ts">
       <DependentUpon>tag-management-page.component.html</DependentUpon>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\app\shared\behaviors\note-tag.behavior.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\behaviors\dictation.behavior.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\components\backdrop.component.ts">
       <DependentUpon>backdrop.component.html</DependentUpon>
     </TypeScriptCompile>
@@ -286,6 +288,7 @@
     <TypeScriptCompile Include="ClientApp\app\shared\utilities\add-or-update.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\utilities\create-element.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\utilities\guid.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\utilities\mixin.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\utilities\pluck-out.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\utilities\pluck.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\utilities\translate-xy.ts" />

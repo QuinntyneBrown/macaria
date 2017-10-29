@@ -3,6 +3,10 @@ import { createElement } from "../utilities/create-element";
 
 export const MODAL_CLOSE = "[Modal] Close";
 
+export function ModalServiceFactory() {
+    return ModalService.instance;
+}
+
 @Injectable()
 export class ModalService {    
 
@@ -11,6 +15,7 @@ export class ModalService {
 
         document.body.addEventListener(MODAL_CLOSE, this.close);
     }
+
     public static get instance() {
         this._instance = this._instance || new ModalService();
         return this._instance;

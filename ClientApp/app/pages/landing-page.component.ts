@@ -18,6 +18,9 @@ import { TagsService } from "../shared/services/tags.service";
 import { addOrUpdate } from "../shared/utilities/add-or-update";
 import { pluckOut } from "../shared/utilities/pluck-out";
 import { Logger } from "../shared/services/logger.service";
+import { Mixin } from "../shared/utilities/mixin";
+import { NoteTagBehavior } from "../shared/behaviors/note-tag.behavior";
+import { DictationBehavior } from "../shared/behaviors/dictation.behavior";
 
 declare var moment: any;
 
@@ -28,100 +31,76 @@ const NOTE_ADDED_OR_UPDATED = "[Notes] NoteAddedOrUpdated";
     styleUrls: ["./landing-page.component.css"],
     selector: "ce-landing-page"
 })
-export class LandingPageComponent {
+@Mixin({
+        behaviors: [DictationBehavior,NoteTagBehavior]
+})
+export class LandingPageComponent implements NoteTagBehavior, DictationBehavior {
     constructor(
-        private _activatedRoute: ActivatedRoute,
-        private _correlationIdsList: CorrelationIdsList,
-        private _elementRef: ElementRef,
-        private _eventHub: EventHub,
-        private _logger: Logger,
-        private _notesService: NotesService,        
-        private _router: Router,
-        private _speechRecognitionService: SpeechRecognitionService,
-        private _storage: Storage,
-        private _tagsService: TagsService
+        public activatedRoute: ActivatedRoute,
+        public correlationIdsList: CorrelationIdsList,
+        public elementRef: ElementRef,
+        public eventHub: EventHub,
+        public logger: Logger,
+        public notesService: NotesService,        
+        public router: Router,
+        public speechRecognitionService: SpeechRecognitionService,
+        public storage: Storage,
+        public tagsService: TagsService
     ) {
-        this.onSaveTagClick = this.onSaveTagClick.bind(this);
-
-        _activatedRoute.params
-            .takeUntil(this._ngUnsubscribe)
+        activatedRoute.params
+            .takeUntil(this.ngUnsubscribe)
             .switchMap(params => params["slug"] != null
-                ? _notesService.getBySlugAndCurrentUser({ slug: params["slug"] })
-                : _notesService.getByTitleAndCurrentUser({ title: moment().format(constants.DATE_FORMAT) })
+                ? notesService.getBySlugAndCurrentUser({ slug: params["slug"] })
+                : notesService.getByTitleAndCurrentUser({ title: moment().format(constants.DATE_FORMAT) })
             )
             .map(x => x.note)
             .subscribe(note => this.note$.next(note || this.note$.value));
     }
 
-    private _ngUnsubscribe: Subject<void> = new Subject<void>();
+    public ngUnsubscribe: Subject<void> = new Subject<void>();
 
     public quillEditorFormControl: FormControl = new FormControl('');
 
-    onSaveTagClick($event) {
-        this._logger.trace(`(LandingPage) onSaveTagClick: ${JSON.stringify($event)}`);
-
-        const correlationId = this._correlationIdsList.newId();
-        this._tagsService.addOrUpdate({ tag: $event.detail.tag, correlationId }).subscribe();
-    }
-
-    ngOnInit() {
-        this._logger.trace("(LandingPage) ngOnInit");
-
-        if (constants.SUPPORTS_SPEECH_RECOGNITION)
-            this._speechRecognitionService.start();
-    }
-
+    
     ngOnDestroy(): void {
-        this._logger.trace("(LandingPage) ngOnDestroy");
+        this.logger.trace("(LandingPage) ngOnDestroy");
 
-        this._ngUnsubscribe.next();
+        this.ngUnsubscribe.next();
 
         if (constants.SUPPORTS_SPEECH_RECOGNITION)
-            this._speechRecognitionService.stop();
+            this.stopDictationBehavior();
     }
 
     async ngAfterViewInit() {
-        this._logger.trace("(LandingPage) ngAfterViewInit");
+        this.logger.trace("(LandingPage) ngAfterViewInit");
 
-        this._tagsService.get()
-            .takeUntil(this._ngUnsubscribe)
+        this.tagsService.get()
+            .takeUntil(this.ngUnsubscribe)
             .subscribe(x => this.tags$.next(x.tags));
 
-        this._speechRecognitionService.finalTranscript$
-            .takeUntil(this._ngUnsubscribe)
-            .filter(x => x && x.length > 0)
-            .map(x => this.quillEditorFormControl.patchValue(`${this.quillEditorFormControl.value}<p>${x}</p>`))
-            .map(x => this._correlationIdsList.newId())
-            .switchMap(correlationId => this._notesService.addOrUpdate({
-                    correlationId,
-                    note: {
-                        id: this.note$.value.id,
-                        title: this.note$.value.title,
-                        body: this.quillEditorFormControl.value
-                    },
-            }))
-            .subscribe();
+        if (constants.SUPPORTS_SPEECH_RECOGNITION)
+            this.startDictationBehavior();
 
-        this._eventHub.events
-            .takeUntil(this._ngUnsubscribe)
-            .filter((x) => !this._correlationIdsList.hasId(x.payload.correlationId))
+        this.eventHub.events
+            .takeUntil(this.ngUnsubscribe)
+            .filter((x) => !this.correlationIdsList.hasId(x.payload.correlationId))
             .filter((x) => x.type == NOTE_ADDED_OR_UPDATED)
-            .filter((x) => x.tenantUniqueId == this._storage.get({ name: constants.TENANT }))
+            .filter((x) => x.tenantUniqueId == this.storage.get({ name: constants.TENANT }))
             .filter((x) => this.note$.value.id == x.payload.entity.id)
             .subscribe(x => this.note$.next(x.payload.entity));
 
         this.note$
             .filter(x => x != null)
-            .takeUntil(this._ngUnsubscribe)
+            .takeUntil(this.ngUnsubscribe)
             .do(x => this.quillEditorFormControl.patchValue(x.body))
             .subscribe(x => this.selectedTags$.next(x.tags));
 
         Observable
-            .fromEvent(this._textEditor, "keyup")
-            .takeUntil(this._ngUnsubscribe)
+            .fromEvent(this.textEditor, "keyup")
+            .takeUntil(this.ngUnsubscribe)
             .debounce(() => Observable.timer(300))
-            .map(() => this._correlationIdsList.newId())
-            .switchMap((correlationId) => this._notesService.addOrUpdate({
+            .map(() => this.correlationIdsList.newId())
+            .switchMap((correlationId) => this.notesService.addOrUpdate({
                 correlationId,
                 note: {
                     id: this.note$.value.id,
@@ -132,28 +111,13 @@ export class LandingPageComponent {
             .subscribe();
     }
 
-    public handleTagClicked($event) {
-        this._logger.trace(`(LandingPage) handleTagClicked: ${JSON.stringify($event)}`);
+    public handleNoteTagClicked($event) { /* NoteTagBehavior */  }
 
-        const tag = <Tag>$event.tag;
-        const correlationId = this._correlationIdsList.newId();
+    public stopDictationBehavior(): void { /* DictationBehavior */ }
 
-        if (this.note$.value.tags.find((x) => x.id == tag.id) != null) {
-            this._notesService.removeTag({ noteId: this.note$.value.id, tagId: tag.id, correlationId })
-                .subscribe();
+    public startDictationBehavior(): void { /* DictationBehavior */ }
 
-            pluckOut({ items: this.note$.value.tags, value: tag.id });
-
-            return;
-        }
-
-        this._notesService.addTag({ noteId: this.note$.value.id, tagId: tag.id, correlationId })
-            .subscribe();
-
-        addOrUpdate({ items: this.note$.value.tags, item: tag });
-    }
-
-    private get _textEditor() { return this._elementRef.nativeElement.querySelector("ce-quill-text-editor"); }
+    public get textEditor() { return this.elementRef.nativeElement.querySelector("ce-quill-text-editor"); }
 
     public tags$: BehaviorSubject<Array<Tag>> = new BehaviorSubject([]);
 

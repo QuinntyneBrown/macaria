@@ -1,5 +1,5 @@
 import { SAVE_TAG_CLICK } from "./tag-edit.component";
-import { MODAL_CLOSE } from "../services/modal.service";
+import { MODAL_CLOSE, ModalService, ModalServiceFactory } from "../services/modal.service";
 import { customEvents } from "../services/custom-events";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Tag } from "../models/tag.model";
@@ -13,9 +13,9 @@ const modalCss = require("../../../styles/modal-window.css");
 export const SAVE_TAG = "[Tags] Save Tag";
 
 export class TagEditModalComponent extends HTMLElement {
-    constructor() {
+    constructor(private _modalService:ModalService = ModalServiceFactory()) {
         super();
-        this.onTagSaveClick = this.onTagSaveClick.bind(this);
+        this.onTagSaveClick = this.onTagSaveClick.bind(this);        
     }
 
     static get observedAttributes () {

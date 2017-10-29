@@ -8,7 +8,7 @@ import {FormsModule,ReactiveFormsModule} from "@angular/forms";
 import { AuthenticationService } from "./services/authentication.service";
 import { CorrelationIdsList } from "./services/correlation-ids-list";
 import { LoginRedirectService } from "./services/login-redirect.service";
-import { EventHub } from "./services/event-hub";
+import { EventHub, EventHubFactory } from "./services/event-hub";
 import { Storage } from "./services/storage.service";
 import { ErrorService } from "./services/error.service";
 import { Logger } from "./services/logger.service";
@@ -16,7 +16,7 @@ import { PopoverService } from "./services/popover.service";
 import { Ruler } from "./services/ruler";
 import { Position } from "./services/position";
 import { Space } from "./services/space";
-import { ModalService } from "./services/modal.service";
+import { ModalService, ModalServiceFactory } from "./services/modal.service";
 import { UsersService } from "./services/users.service";
 import { NotesService } from "./services/notes.service";
 import { TagsService } from "./services/tags.service";
@@ -51,7 +51,6 @@ import "./components/backdrop.component";
 
 import { LogLevel } from "./services/logger.service";
 
-
 const declarables = [
     HeaderComponent,
     LoginComponent,
@@ -72,8 +71,8 @@ const declarables = [
     exports:[declarables],
     providers: [
         { provide: constants.MINIMUM_LOG_LEVEL, useValue: LogLevel.Trace },
-        
-        EventHub,
+        { provide: ModalService, useFactory: ModalServiceFactory },
+        { provide: EventHub, useFactory: EventHubFactory, deps:[ Logger, Storage] },
         AuthGuardService,
         Logger,
         AuthenticationService,

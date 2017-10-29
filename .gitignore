@@ -26,6 +26,7 @@ bld/
 
 ClientApp/**/*.js
 ClientApp/**/*.js.map
+ClientApp/**/*.json
 
 aot
 dist

@@ -15,6 +15,11 @@ enum connectionState {
     disconnected
 }
 
+export function EventHubFactory (_logger: Logger, _storage: Storage) {
+    EventHub.instance = EventHub.instance || new EventHub(_logger, _storage);
+    return EventHub.instance;
+}
+
 @Injectable()
 export class EventHub {
     private _eventHub: any;
@@ -22,12 +27,8 @@ export class EventHub {
     private _connectionState: connectionState = connectionState.disconnected;
     private _connectPromise: Promise<any>;
     public events: Subject<any> = new Subject();
-    private static _instance;
-
-    public static get instance() {
-        this._instance = this._instance || new EventHub(Logger.instance, Storage.instance);
-        return this._instance;
-    }
+    
+    public static instance: EventHub;
 
     constructor(private _logger: Logger, private _storage: Storage) { }
 
